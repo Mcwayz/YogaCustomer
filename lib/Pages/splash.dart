@@ -17,7 +17,7 @@ class SplashScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Center(
         child: Image.asset(
-          "assets/images/logo.png", // Replace with your logo path
+          "assets/logo.png", // Replace with your logo path
           height: 150,
         ),
       ),
