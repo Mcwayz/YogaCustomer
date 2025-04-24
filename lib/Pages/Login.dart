@@ -23,7 +23,13 @@ class SignInScreen extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 16),
+                  // Add the logo image here
+                  Image.asset(
+                    "assets/images/logo.png", // Replace with your logo path
+                    height: 100,
+                  ),
+                  const SizedBox(height: 16),
                   const Text(
                     "Welcome Back",
                     style: TextStyle(
@@ -89,7 +95,6 @@ class SignInForm extends StatelessWidget {
             onChanged: (email) {
               // Handle email input change
             },
-          
           ),
           const SizedBox(height: 24),
           CustomTextInput(
@@ -101,9 +106,7 @@ class SignInForm extends StatelessWidget {
             onChanged: (password) {
               // Handle password input change
             },
-          
           ),
-
           const SizedBox(height: 8),
           ElevatedButton(
             onPressed: () {
@@ -127,7 +130,7 @@ class SignInForm extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>  ChangePasswordScreen(), 
+                  builder: (context) => ChangePasswordScreen(), // Replace with your Forgot Password screen
                 ),
               );
             },
@@ -139,8 +142,6 @@ class SignInForm extends StatelessWidget {
               ),
             ),
           ),
-          
-          
         ],
       ),
     );
