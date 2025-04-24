@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../component/customAppBar.dart';
+
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
 
@@ -7,14 +9,10 @@ class SignUpScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
+      appBar: CustomAppBar(
         backgroundColor: Colors.white,
-        title: const Text(
-          "Sign Up",
-          style: TextStyle(color: Colors.black),
-        ),
-        centerTitle: true,
-        elevation: 0,
+        title: "",
+        centerTitle: false,
       ),
       body: SafeArea(
         child: SingleChildScrollView(
