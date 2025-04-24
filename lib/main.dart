@@ -1,3 +1,4 @@
+import 'package:customer_app/Pages/Login.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
             title: 'Yoga Customer',
             initialRoute: "/",
             routes: {
-              
+              '/': (context) => const SignInScreen(),
             }
     );
   }

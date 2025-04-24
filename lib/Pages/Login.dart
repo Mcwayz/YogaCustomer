@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../component/CustomTextInput.dart'; // Import the CustomTextInput component
 
 class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});
@@ -68,11 +69,6 @@ class SignInScreen extends StatelessWidget {
   }
 }
 
-const authOutlineInputBorder = OutlineInputBorder(
-  borderSide: BorderSide(color: Color(0xFF757575)),
-  borderRadius: BorderRadius.all(Radius.circular(100)),
-);
-
 class SignInForm extends StatelessWidget {
   const SignInForm({super.key});
 
@@ -81,54 +77,37 @@ class SignInForm extends StatelessWidget {
     return Form(
       child: Column(
         children: [
-          TextFormField(
-            onSaved: (email) {},
-            onChanged: (email) {},
+          CustomTextInput(
+            hintText: "Enter your email",
+            labelText: "Email",
+            suffixIcon: const Icon(Icons.email, color: Color(0xFF757575)),
             textInputAction: TextInputAction.next,
-            decoration: InputDecoration(
-              hintText: "Enter your email",
-              labelText: "Email",
-              floatingLabelBehavior: FloatingLabelBehavior.always,
-              hintStyle: const TextStyle(color: Color(0xFF757575)),
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 24,
-                vertical: 16,
-              ),
-              suffixIcon: const Icon(Icons.email, color: Color(0xFF757575)),
-              border: authOutlineInputBorder,
-              enabledBorder: authOutlineInputBorder,
-              focusedBorder: authOutlineInputBorder.copyWith(
-                borderSide: const BorderSide(color: Color(0xFFFF7643)),
-              ),
-            ),
+            onChanged: (email) {
+              // Handle email input change
+            },
+            onSaved: (email) {
+              // Handle email save
+            },
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 24),
-            child: TextFormField(
-              onSaved: (password) {},
-              onChanged: (password) {},
-              obscureText: true,
-              decoration: InputDecoration(
-                hintText: "Enter your password",
-                labelText: "Password",
-                floatingLabelBehavior: FloatingLabelBehavior.always,
-                hintStyle: const TextStyle(color: Color(0xFF757575)),
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 16,
-                ),
-                suffixIcon: const Icon(Icons.lock, color: Color(0xFF757575)),
-                border: authOutlineInputBorder,
-                enabledBorder: authOutlineInputBorder,
-                focusedBorder: authOutlineInputBorder.copyWith(
-                  borderSide: const BorderSide(color: Color(0xFFFF7643)),
-                ),
-              ),
-            ),
+          const SizedBox(height: 24),
+          CustomTextInput(
+            hintText: "Enter your password",
+            labelText: "Password",
+            suffixIcon: const Icon(Icons.lock, color: Color(0xFF757575)),
+            obscureText: true,
+            textInputAction: TextInputAction.done,
+            onChanged: (password) {
+              // Handle password input change
+            },
+            onSaved: (password) {
+              // Handle password save
+            },
           ),
           const SizedBox(height: 8),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              // Handle form submission
+            },
             style: ElevatedButton.styleFrom(
               elevation: 0,
               backgroundColor: const Color(0xFFFF7643),
@@ -139,7 +118,7 @@ class SignInForm extends StatelessWidget {
               ),
             ),
             child: const Text("Continue"),
-          )
+          ),
         ],
       ),
     );
