@@ -15,6 +15,7 @@ class _HomePageState extends State<HomePage> {
   List<dynamic> yogaClasses = [];
   List<dynamic> filteredClasses = [];
   String searchQuery = "";
+  int _selectedIndex = 0;
 
   @override
   void initState() {
@@ -53,31 +54,31 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    if (index == 0) {
+      // Stay on HomePage
+    } else if (index == 1) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const CartPage()),
+      );
+    } else if (index == 2) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const BookedClassesPage()),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Yoga Classes"),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.shopping_cart),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const CartPage()),
-              );
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.book),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const BookedClassesPage()),
-              );
-            },
-          ),
-        ],
       ),
       body: Column(
         children: [
@@ -106,6 +107,24 @@ class _HomePageState extends State<HomePage> {
                 );
               },
             ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: "Home",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart),
+            label: "Cart",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.book),
+            label: "Booked",
           ),
         ],
       ),
