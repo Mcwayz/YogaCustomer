@@ -1,3 +1,4 @@
+import 'package:customer_app/Pages/HomePage.dart';
 import 'package:customer_app/component/customAppBar.dart';
 import 'package:flutter/material.dart';
 import 'SignUp.dart';
@@ -80,6 +81,9 @@ class SignInScreen extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   // Handle form submission
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => const HomePage(),
+                  ));
                 },
                 style: ElevatedButton.styleFrom(
                   elevation: 0,
