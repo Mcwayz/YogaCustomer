@@ -33,26 +33,25 @@ class SignInScreen extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Color(0xFF757575)),
                   ),
-                  // const SizedBox(height: 16),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                  SignInForm(),
+                  const SignInForm(),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.2),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SocalCard(
-                        icon: SvgPicture.string(googleIcon),
+                        icon: const Icon(Icons.g_mobiledata, size: 32, color: Colors.red),
                         press: () {},
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: SocalCard(
-                          icon: SvgPicture.string(facebookIcon),
+                          icon: const Icon(Icons.facebook, size: 32, color: Colors.blue),
                           press: () {},
                         ),
                       ),
                       SocalCard(
-                        icon: SvgPicture.string(twitterIcon),
+                        icon: const Icon(Icons.alternate_email, size: 32, color: Colors.lightBlue),
                         press: () {},
                       ),
                     ],
@@ -87,21 +86,21 @@ class SignInForm extends StatelessWidget {
             onChanged: (email) {},
             textInputAction: TextInputAction.next,
             decoration: InputDecoration(
-                hintText: "Enter your email",
-                labelText: "Email",
-                floatingLabelBehavior: FloatingLabelBehavior.always,
-                hintStyle: const TextStyle(color: Color(0xFF757575)),
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 16,
-                ),
-                suffix: SvgPicture.string(
-                  mailIcon,
-                ),
-                border: authOutlineInputBorder,
-                enabledBorder: authOutlineInputBorder,
-                focusedBorder: authOutlineInputBorder.copyWith(
-                    borderSide: const BorderSide(color: Color(0xFFFF7643)))),
+              hintText: "Enter your email",
+              labelText: "Email",
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+              hintStyle: const TextStyle(color: Color(0xFF757575)),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 24,
+                vertical: 16,
+              ),
+              suffixIcon: const Icon(Icons.email, color: Color(0xFF757575)),
+              border: authOutlineInputBorder,
+              enabledBorder: authOutlineInputBorder,
+              focusedBorder: authOutlineInputBorder.copyWith(
+                borderSide: const BorderSide(color: Color(0xFFFF7643)),
+              ),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 24),
@@ -110,21 +109,21 @@ class SignInForm extends StatelessWidget {
               onChanged: (password) {},
               obscureText: true,
               decoration: InputDecoration(
-                  hintText: "Enter your password",
-                  labelText: "Password",
-                  floatingLabelBehavior: FloatingLabelBehavior.always,
-                  hintStyle: const TextStyle(color: Color(0xFF757575)),
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 16,
-                  ),
-                  suffix: SvgPicture.string(
-                    lockIcon,
-                  ),
-                  border: authOutlineInputBorder,
-                  enabledBorder: authOutlineInputBorder,
-                  focusedBorder: authOutlineInputBorder.copyWith(
-                      borderSide: const BorderSide(color: Color(0xFFFF7643)))),
+                hintText: "Enter your password",
+                labelText: "Password",
+                floatingLabelBehavior: FloatingLabelBehavior.always,
+                hintStyle: const TextStyle(color: Color(0xFF757575)),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 16,
+                ),
+                suffixIcon: const Icon(Icons.lock, color: Color(0xFF757575)),
+                border: authOutlineInputBorder,
+                enabledBorder: authOutlineInputBorder,
+                focusedBorder: authOutlineInputBorder.copyWith(
+                  borderSide: const BorderSide(color: Color(0xFFFF7643)),
+                ),
+              ),
             ),
           ),
           const SizedBox(height: 8),
@@ -169,7 +168,7 @@ class SocalCard extends StatelessWidget {
           color: Color(0xFFF5F6F9),
           shape: BoxShape.circle,
         ),
-        child: icon,
+        child: Center(child: icon),
       ),
     );
   }

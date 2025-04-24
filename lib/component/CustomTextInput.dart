@@ -1,4 +1,4 @@
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter/material.dart';
 import '../Components/CustomTextInput.dart';
 
 class SignInForm extends StatelessWidget {
@@ -12,7 +12,7 @@ class SignInForm extends StatelessWidget {
           CustomTextInput(
             hintText: "Enter your email",
             labelText: "Email",
-            suffixIcon: SvgPicture.string(mailIcon),
+            suffixIcon: const Icon(Icons.email, color: Color(0xFF757575)),
             textInputAction: TextInputAction.next,
             onChanged: (email) {},
             onSaved: (email) {},
@@ -21,7 +21,7 @@ class SignInForm extends StatelessWidget {
           CustomTextInput(
             hintText: "Enter your password",
             labelText: "Password",
-            suffixIcon: SvgPicture.string(lockIcon),
+            suffixIcon: const Icon(Icons.lock, color: Color(0xFF757575)),
             obscureText: true,
             textInputAction: TextInputAction.done,
             onChanged: (password) {},
