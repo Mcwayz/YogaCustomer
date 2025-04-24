@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'Pages/MainNavigation.dart';
 import 'Pages/splash.dart';
 import 'Auth/Login.dart';
 
@@ -16,8 +17,9 @@ class MyApp extends StatelessWidget {
       title: 'Yoga Customer',
       initialRoute: "/",
       routes: {
-        '/': (context) => const SplashScreen(), // Splash screen as the initial route
-        '/login': (context) => const SignInScreen(), // Login screen route
+        '/': (context) => const SplashScreen(), 
+        '/login': (context) => const SignInScreen(), 
+        '/Navigation': (context) => const MainNavigation(),
       },
     );
   }

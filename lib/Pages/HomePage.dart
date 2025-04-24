@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'CartPage.dart';
+import 'BookedClassesPage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -13,6 +15,7 @@ class _HomePageState extends State<HomePage> {
   List<dynamic> yogaClasses = [];
   List<dynamic> filteredClasses = [];
   String searchQuery = "";
+  int _selectedIndex = 0;
 
   @override
   void initState() {
@@ -28,6 +31,7 @@ class _HomePageState extends State<HomePage> {
         filteredClasses = yogaClasses;
       });
     } else {
+      // Handle error
       print("Failed to fetch classes");
     }
   }
@@ -41,6 +45,33 @@ class _HomePageState extends State<HomePage> {
         return day.contains(searchQuery) || time.contains(searchQuery);
       }).toList();
     });
+  }
+
+  void addToCart(dynamic yogaClass) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => CartPage(yogaClass: yogaClass)),
+    );
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    if (index == 0) {
+      // Stay on HomePage
+    } else if (index == 1) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const CartPage()),
+      );
+    } else if (index == 2) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const BookedClassesPage()),
+      );
+    }
   }
 
   @override
@@ -70,14 +101,30 @@ class _HomePageState extends State<HomePage> {
                   title: Text(yogaClass['name']),
                   subtitle: Text("${yogaClass['day']} at ${yogaClass['time']}"),
                   trailing: ElevatedButton(
-                    onPressed: () {
-                      // Add to cart logic
-                    },
+                    onPressed: () => addToCart(yogaClass),
                     child: const Text("Add to Cart"),
                   ),
                 );
               },
             ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: "Home",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart),
+            label: "Cart",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.book),
+            label: "Booked",
           ),
         ],
       ),
