@@ -1,6 +1,6 @@
-import 'package:customer_app/component/customAppBar.dart';
 import 'package:flutter/material.dart';
 import '../component/CustomTextInput.dart'; // Import the CustomTextInput component
+import '../component/customAppBar.dart'; // Import the CustomAppBar component
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
@@ -8,7 +8,7 @@ class SignUpScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CustomAppBar(
+      appBar: const CustomAppBar(
         backgroundColor: Colors.white,
         title: "Sign Up",
         centerTitle: true,
@@ -21,6 +21,12 @@ class SignUpScreen extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(
                 children: [
+                  const SizedBox(height: 16),
+                  // Add the logo image here
+                  Image.asset(
+                    "assets/images/logo.png", // Replace with your logo path
+                    height: 100,
+                  ),
                   const SizedBox(height: 16),
                   const Text(
                     "Register Account",
@@ -85,11 +91,6 @@ class SignUpForm extends StatelessWidget {
     return Form(
       child: Column(
         children: [
-
-          Image.asset(
-            "assets/images/logo.png",
-
-          ),
           CustomTextInput(
             hintText: "Enter your email",
             labelText: "Email",
@@ -146,7 +147,6 @@ class SignUpForm extends StatelessWidget {
             ),
             child: const Text("Continue"),
           ),
-
           const SizedBox(height: 16),
           TextButton(
             onPressed: () {
@@ -173,7 +173,6 @@ class SignUpForm extends StatelessWidget {
             ),
           ),
         ],
-        
       ),
     );
   }
