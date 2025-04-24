@@ -24,7 +24,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> fetchYogaClasses() async {
-    final response = await http.get(Uri.parse('https://your-cloud-service/api/classes'));
+    final response = await http.get(Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/courses'));
     if (response.statusCode == 200) {
       setState(() {
         yogaClasses = json.decode(response.body);
@@ -110,24 +110,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: "Cart",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.book),
-            label: "Booked",
-          ),
-        ],
-      ),
+
     );
   }
 }
