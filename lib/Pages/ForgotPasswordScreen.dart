@@ -110,11 +110,6 @@ class LogoWithTitle extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Column(
             children: [
-              SizedBox(height: constraints.maxHeight * 0.1),
-              Image.network(
-                "https://i.postimg.cc/nz0YBQcH/Logo-light.png",
-                height: 100,
-              ),
               SizedBox(
                 height: constraints.maxHeight * 0.1,
                 width: double.infinity,
