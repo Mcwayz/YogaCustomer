@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../component/CustomTextInput.dart';
 
 class ChangePasswordScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
@@ -15,47 +16,35 @@ class ChangePasswordScreen extends StatelessWidget {
             key: _formKey,
             child: Column(
               children: [
-                TextFormField(
+                CustomTextInput(
+                  hintText: "Enter your new password",
+                  labelText: "New Password",
                   obscureText: true,
-                  decoration: const InputDecoration(
-                    hintText: 'Password',
-                    filled: true,
-                    fillColor: Color(0xFFF5FCF9),
-                    contentPadding: EdgeInsets.symmetric(
-                        horizontal: 16.0 * 1.5, vertical: 16.0),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.all(Radius.circular(50)),
-                    ),
-                  ),
-                  onSaved: (passaword) {
-                    // Save it
+                  suffixIcon: const Icon(Icons.lock, color: Color(0xFF757575)),
+                  onChanged: (password) {
+                    // Handle password input change
                   },
-                  onChanged: (value) {},
+                  onSaved: (password) {
+                    // Save password
+                  },
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: TextFormField(
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      hintText: ' Confirm Password',
-                      filled: true,
-                      fillColor: Color(0xFFF5FCF9),
-                      contentPadding: EdgeInsets.symmetric(
-                          horizontal: 16.0 * 1.5, vertical: 16.0),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.all(Radius.circular(50)),
-                      ),
-                    ),
-                    onSaved: (passaword) {
-                      // Save it
-                    },
-                  ),
+                const SizedBox(height: 16),
+                CustomTextInput(
+                  hintText: "Confirm your new password",
+                  labelText: "Confirm Password",
+                  obscureText: true,
+                  suffixIcon: const Icon(Icons.lock_outline, color: Color(0xFF757575)),
+                  onChanged: (password) {
+                    // Handle confirm password input change
+                  },
+                  onSaved: (password) {
+                    // Save confirm password
+                  },
                 ),
               ],
             ),
           ),
+          const SizedBox(height: 24),
           ElevatedButton(
             onPressed: () {
               if (_formKey.currentState!.validate()) {
@@ -64,15 +53,19 @@ class ChangePasswordScreen extends StatelessWidget {
             },
             style: ElevatedButton.styleFrom(
               elevation: 0,
-              backgroundColor: const Color(0xFF00BF6D),
+              backgroundColor: const Color(0xFFFF7643),
               foregroundColor: Colors.white,
               minimumSize: const Size(double.infinity, 48),
               shape: const StadiumBorder(),
             ),
             child: const Text("Change Password"),
           ),
+          const SizedBox(height: 16),
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              // Handle navigation to Sign In screen
+              Navigator.pop(context);
+            },
             child: Text.rich(
               TextSpan(
                 text: "Already have an account? ",
@@ -102,12 +95,13 @@ class LogoWithTitle extends StatelessWidget {
   final String title, subText;
   final List<Widget> children;
 
-  const LogoWithTitle(
-      {Key? key,
-      required this.title,
-      this.subText = '',
-      required this.children})
-      : super(key: key);
+  const LogoWithTitle({
+    Key? key,
+    required this.title,
+    this.subText = '',
+    required this.children,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
