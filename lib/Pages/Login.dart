@@ -1,3 +1,4 @@
+import 'package:customer_app/component/customAppBar.dart';
 import 'package:flutter/material.dart';
 import 'SignUp.dart';
 import 'ForgotPasswordScreen.dart';
@@ -9,14 +10,10 @@ class SignInScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
+      appBar: CustomAppBar(
         backgroundColor: Colors.white,
-        title: const Text(
-          "Sign In",
-          style: TextStyle(color: Colors.black),
-        ),
-        centerTitle: true,
-        elevation: 0,
+        title: "Sign In",
+        centerTitle: false,
       ),
       body: SafeArea(
         child: SingleChildScrollView(
