@@ -1,6 +1,7 @@
 import 'package:customer_app/Pages/SignUp.dart';
 import 'package:flutter/material.dart';
-import '../component/CustomTextInput.dart'; // Import the CustomTextInput component
+import '../component/CustomTextInput.dart';
+import '../component/customAppBar.dart'; // Import the CustomTextInput component
 
 class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});
