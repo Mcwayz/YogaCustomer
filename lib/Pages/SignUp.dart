@@ -140,8 +140,35 @@ class SignUpForm extends StatelessWidget {
               ),
             ),
             child: const Text("Continue"),
-          )
+          ),
+
+          const SizedBox(height: 16),
+          TextButton(
+            onPressed: () {
+              // Handle navigation to Sign In screen
+              Navigator.pop(context);
+            },
+            child: Text.rich(
+              TextSpan(
+                text: "Already have an account? ",
+                children: [
+                  TextSpan(
+                    text: "Sign in",
+                    style: TextStyle(color: Theme.of(context).primaryColor),
+                  ),
+                ],
+              ),
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    color: Theme.of(context)
+                        .textTheme
+                        .bodyLarge!
+                        .color!
+                        .withOpacity(0.64),
+                  ),
+            ),
+          ),
         ],
+        
       ),
     );
   }
