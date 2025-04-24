@@ -1,47 +1,54 @@
 import 'package:flutter/material.dart';
-import '../Components/CustomTextInput.dart';
 
-class SignInForm extends StatelessWidget {
-  const SignInForm({super.key});
+class CustomTextInput extends StatelessWidget {
+  final String hintText;
+  final String labelText;
+  final Widget? suffixIcon;
+  final bool obscureText;
+  final TextInputAction textInputAction;
+  final ValueChanged<String>? onChanged;
+  final FormFieldSetter<String>? onSaved;
+
+  const CustomTextInput({
+    Key? key,
+    required this.hintText,
+    required this.labelText,
+    this.suffixIcon,
+    this.obscureText = false,
+    this.textInputAction = TextInputAction.done,
+    this.onChanged,
+    this.onSaved,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      child: Column(
-        children: [
-          CustomTextInput(
-            hintText: "Enter your email",
-            labelText: "Email",
-            suffixIcon: const Icon(Icons.email, color: Color(0xFF757575)),
-            textInputAction: TextInputAction.next,
-            onChanged: (email) {},
-            onSaved: (email) {},
-          ),
-          const SizedBox(height: 24),
-          CustomTextInput(
-            hintText: "Enter your password",
-            labelText: "Password",
-            suffixIcon: const Icon(Icons.lock, color: Color(0xFF757575)),
-            obscureText: true,
-            textInputAction: TextInputAction.done,
-            onChanged: (password) {},
-            onSaved: (password) {},
-          ),
-          const SizedBox(height: 8),
-          ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              elevation: 0,
-              backgroundColor: const Color(0xFFFF7643),
-              foregroundColor: Colors.white,
-              minimumSize: const Size(double.infinity, 48),
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(16)),
-              ),
-            ),
-            child: const Text("Continue"),
-          ),
-        ],
+    return TextFormField(
+      obscureText: obscureText,
+      textInputAction: textInputAction,
+      onChanged: onChanged,
+      onSaved: onSaved,
+      decoration: InputDecoration(
+        hintText: hintText,
+        labelText: labelText,
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        hintStyle: const TextStyle(color: Color(0xFF757575)),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 24,
+          vertical: 16,
+        ),
+        suffixIcon: suffixIcon,
+        border: const OutlineInputBorder(
+          borderSide: BorderSide(color: Color(0xFF757575)),
+          borderRadius: BorderRadius.all(Radius.circular(100)),
+        ),
+        enabledBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: Color(0xFF757575)),
+          borderRadius: BorderRadius.all(Radius.circular(100)),
+        ),
+        focusedBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: Color(0xFFFF7643)),
+          borderRadius: BorderRadius.all(Radius.circular(100)),
+        ),
       ),
     );
   }
