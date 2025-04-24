@@ -110,6 +110,26 @@ class SignUpScreen extends StatelessWidget {
                     ),
                   ],
                 ),
+              ), const SizedBox(height: 16),
+              // Already have an account? Sign In
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(context); // Navigate back to Sign In screen
+                },
+                child: const Text.rich(
+                  TextSpan(
+                    text: "Already have an account? ",
+                    children: [
+                      TextSpan(
+                        text: "Sign in",
+                        style: TextStyle(
+                          color: Color(0xFFFF7643),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
               const SizedBox(height: 16),
               // Social Media Buttons
@@ -147,26 +167,7 @@ class SignUpScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              // Already have an account? Sign In
-              GestureDetector(
-                onTap: () {
-                  Navigator.pop(context); // Navigate back to Sign In screen
-                },
-                child: const Text.rich(
-                  TextSpan(
-                    text: "Already have an account? ",
-                    children: [
-                      TextSpan(
-                        text: "Sign in",
-                        style: TextStyle(
-                          color: Color(0xFFFF7643),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              
             ],
           ),
         ),
