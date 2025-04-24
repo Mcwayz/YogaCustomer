@@ -1,10 +1,9 @@
-import 'package:customer_app/Pages/Login.dart';
 import 'package:flutter/material.dart';
-
 import 'Pages/splash.dart';
+import 'Pages/Login.dart';
 
 void main() {
-  runApp( MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -14,12 +13,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-           home: const SplashScreen(),
-            title: 'Yoga Customer',
-            initialRoute: "/",
-            routes: {
-              '/': (context) => const SignInScreen(),
-            }
+      title: 'Yoga Customer',
+      initialRoute: "/",
+      routes: {
+        '/': (context) => const SplashScreen(), // Splash screen as the initial route
+        '/login': (context) => const SignInScreen(), // Login screen route
+      },
     );
   }
 }
