@@ -11,7 +11,7 @@ class SignInScreen extends StatelessWidget {
       backgroundColor: Colors.white,
        appBar: CustomAppBar(
         backgroundColor: Colors.white,
-        title: "Sign Up",
+        title: "Sign In",
         centerTitle: true,
       ),
       body: SafeArea(
