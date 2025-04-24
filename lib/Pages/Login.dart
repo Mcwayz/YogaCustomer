@@ -1,3 +1,4 @@
+import 'package:customer_app/Pages/SignUp.dart';
 import 'package:flutter/material.dart';
 import '../component/CustomTextInput.dart'; // Import the CustomTextInput component
 
@@ -170,6 +171,12 @@ class NoAccountText extends StatelessWidget {
         GestureDetector(
           onTap: () {
             // Handle navigation to Sign Up
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const SignUpScreen(),
+              ),
+            );
           },
           child: const Text(
             "Sign Up",
