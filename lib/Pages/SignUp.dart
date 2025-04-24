@@ -1,3 +1,4 @@
+import 'package:customer_app/component/customAppBar.dart';
 import 'package:flutter/material.dart';
 import '../component/CustomTextInput.dart'; // Import the CustomTextInput component
 
@@ -7,9 +8,10 @@ class SignUpScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
+      appBar: CustomAppBar(
         backgroundColor: Colors.white,
-        title: const Text(""),
+        title: "Sign Up",
+        centerTitle: true,
       ),
       body: SafeArea(
         child: SizedBox(

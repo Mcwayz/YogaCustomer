@@ -8,6 +8,11 @@ class SignInScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+       appBar: CustomAppBar(
+        backgroundColor: Colors.white,
+        title: "Sign Up",
+        centerTitle: true,
+      ),
       body: SafeArea(
         child: SizedBox(
           width: double.infinity,
