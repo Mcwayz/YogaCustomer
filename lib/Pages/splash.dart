@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'Login.dart'; // Replace with the screen you want to navigate to after the splash screen
+import '../Auth/Login.dart'; // Replace with the screen you want to navigate to after the splash screen
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
