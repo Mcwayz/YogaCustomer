@@ -1,206 +1,177 @@
 import 'package:flutter/material.dart';
-import '../component/CustomTextInput.dart'; // Import the CustomTextInput component
-import '../component/customAppBar.dart'; // Import the CustomAppBar component
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const CustomAppBar(
+      appBar: AppBar(
         backgroundColor: Colors.white,
-        title: "Sign Up",
+        title: const Text(
+          "Sign Up",
+          style: TextStyle(color: Colors.black),
+        ),
         centerTitle: true,
+        elevation: 0,
       ),
       body: SafeArea(
-        child: SizedBox(
-          width: double.infinity,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  const SizedBox(height: 16),
-                  // Add the logo image here
-                  Image.asset(
-                    "assets/images/logo.png", // Replace with your logo path
-                    height: 100,
-                  ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    "Register Account",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    "Complete your details or continue \nwith social media",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Color(0xFF757575)),
-                  ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                  const SignUpForm(),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.15),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SocalCard(
-                        icon: const Icon(Icons.g_mobiledata, size: 32, color: Colors.red),
-                        press: () {},
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: SocalCard(
-                          icon: const Icon(Icons.facebook, size: 32, color: Colors.blue),
-                          press: () {},
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            children: [
+              const SizedBox(height: 16),
+              // Logo
+              Image.asset(
+                "assets/images/logo.png", // Replace with your logo path
+                height: 100,
+              ),
+              const SizedBox(height: 16),
+              // Title
+              const Text(
+                "Register Account",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                "Complete your details or continue \nwith social media",
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Color(0xFF757575)),
+              ),
+              const SizedBox(height: 32),
+              // Form
+              Form(
+                child: Column(
+                  children: [
+                    TextFormField(
+                      decoration: const InputDecoration(
+                        hintText: "Enter your email",
+                        labelText: "Email",
+                        prefixIcon: Icon(Icons.email, color: Color(0xFF757575)),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(16)),
                         ),
                       ),
-                      SocalCard(
-                        icon: const Icon(Icons.alternate_email, size: 32, color: Colors.lightBlue),
-                        press: () {},
+                      textInputAction: TextInputAction.next,
+                      onChanged: (value) {
+                        // Handle email input change
+                      },
+                    ),
+                    const SizedBox(height: 24),
+                    TextFormField(
+                      obscureText: true,
+                      decoration: const InputDecoration(
+                        hintText: "Enter your password",
+                        labelText: "Password",
+                        prefixIcon: Icon(Icons.lock, color: Color(0xFF757575)),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(16)),
+                        ),
+                      ),
+                      textInputAction: TextInputAction.next,
+                      onChanged: (value) {
+                        // Handle password input change
+                      },
+                    ),
+                    const SizedBox(height: 24),
+                    TextFormField(
+                      obscureText: true,
+                      decoration: const InputDecoration(
+                        hintText: "Re-enter your password",
+                        labelText: "Re-enter Password",
+                        prefixIcon: Icon(Icons.lock, color: Color(0xFF757575)),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(16)),
+                        ),
+                      ),
+                      textInputAction: TextInputAction.done,
+                      onChanged: (value) {
+                        // Handle password input change
+                      },
+                    ),
+                    const SizedBox(height: 32),
+                    ElevatedButton(
+                      onPressed: () {
+                        // Handle form submission
+                      },
+                      style: ElevatedButton.styleFrom(
+                        elevation: 0,
+                        backgroundColor: const Color(0xFFFF7643),
+                        foregroundColor: Colors.white,
+                        minimumSize: const Size(double.infinity, 48),
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(16)),
+                        ),
+                      ),
+                      child: const Text("Continue"),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+              // Social Media Buttons
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.g_mobiledata, size: 32, color: Colors.red),
+                    onPressed: () {
+                      // Handle Google login
+                    },
+                  ),
+                  const SizedBox(width: 16),
+                  IconButton(
+                    icon: const Icon(Icons.facebook, size: 32, color: Colors.blue),
+                    onPressed: () {
+                      // Handle Facebook login
+                    },
+                  ),
+                  const SizedBox(width: 16),
+                  IconButton(
+                    icon: const Icon(Icons.alternate_email, size: 32, color: Colors.lightBlue),
+                    onPressed: () {
+                      // Handle Email login
+                    },
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                "By continuing your confirm that you agree \nwith our Term and Condition",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Color(0xFF757575),
+                ),
+              ),
+              const SizedBox(height: 16),
+              // Already have an account? Sign In
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(context); // Navigate back to Sign In screen
+                },
+                child: const Text.rich(
+                  TextSpan(
+                    text: "Already have an account? ",
+                    children: [
+                      TextSpan(
+                        text: "Sign in",
+                        style: TextStyle(
+                          color: Color(0xFFFF7643),
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    "By continuing your confirm that you agree \nwith our Term and Condition",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Color(0xFF757575),
-                    ),
-                  )
-                ],
+                ),
               ),
-            ),
+            ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class SignUpForm extends StatelessWidget {
-  const SignUpForm({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Form(
-      child: Column(
-        children: [
-          CustomTextInput(
-            hintText: "Enter your email",
-            labelText: "Email",
-            suffixIcon: const Icon(Icons.email, color: Color(0xFF757575)),
-            textInputAction: TextInputAction.next,
-            onChanged: (email) {
-              // Handle email input change
-            },
-            onSaved: (email) {
-              // Handle email save
-            },
-          ),
-          const SizedBox(height: 24),
-          CustomTextInput(
-            hintText: "Enter your password",
-            labelText: "Password",
-            suffixIcon: const Icon(Icons.lock, color: Color(0xFF757575)),
-            obscureText: true,
-            textInputAction: TextInputAction.next,
-            onChanged: (password) {
-              // Handle password input change
-            },
-            onSaved: (password) {
-              // Handle password save
-            },
-          ),
-          const SizedBox(height: 24),
-          CustomTextInput(
-            hintText: "Re-enter your password",
-            labelText: "Re-enter Password",
-            suffixIcon: const Icon(Icons.lock, color: Color(0xFF757575)),
-            obscureText: true,
-            textInputAction: TextInputAction.done,
-            onChanged: (password) {
-              // Handle password input change
-            },
-            onSaved: (password) {
-              // Handle password save
-            },
-          ),
-          const SizedBox(height: 32),
-          ElevatedButton(
-            onPressed: () {
-              // Handle form submission
-            },
-            style: ElevatedButton.styleFrom(
-              elevation: 0,
-              backgroundColor: const Color(0xFFFF7643),
-              foregroundColor: Colors.white,
-              minimumSize: const Size(double.infinity, 48),
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(16)),
-              ),
-            ),
-            child: const Text("Continue"),
-          ),
-          const SizedBox(height: 16),
-          TextButton(
-            onPressed: () {
-              // Handle navigation to Sign In screen
-              Navigator.pop(context);
-            },
-            child: Text.rich(
-              TextSpan(
-                text: "Already have an account? ",
-                children: [
-                  TextSpan(
-                    text: "Sign in",
-                    style: TextStyle(color: Theme.of(context).primaryColor),
-                  ),
-                ],
-              ),
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    color: Theme.of(context)
-                        .textTheme
-                        .bodyLarge!
-                        .color!
-                        .withOpacity(0.64),
-                  ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class SocalCard extends StatelessWidget {
-  const SocalCard({
-    super.key,
-    required this.icon,
-    required this.press,
-  });
-
-  final Widget icon;
-  final VoidCallback press;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: press,
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        height: 56,
-        width: 56,
-        decoration: const BoxDecoration(
-          color: Color(0xFFF5F6F9),
-          shape: BoxShape.circle,
-        ),
-        child: Center(child: icon),
       ),
     );
   }
