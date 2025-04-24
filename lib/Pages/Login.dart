@@ -135,7 +135,7 @@ class SignInForm extends StatelessWidget {
               style: TextStyle(
                 color: Color(0xFFFF7643),
                 fontSize: 16,
-                fontWeight: FontWeight.bold,
+                
               ),
             ),
           ),
