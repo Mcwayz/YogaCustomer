@@ -122,6 +122,20 @@ class SignInForm extends StatelessWidget {
             ),
             child: const Text("Continue"),
           ),
+
+          const SizedBox(height: 16),
+          GestureDetector(
+            onTap: () {
+              // Handle forgot password
+            },
+            child: const Text(
+              "Forgot Password?",
+              style: TextStyle(
+                color: Color(0xFFFF7643),
+                fontSize: 16,
+              ),
+            ),
+          ),
         ],
       ),
     );
