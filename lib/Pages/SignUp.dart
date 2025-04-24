@@ -85,6 +85,11 @@ class SignUpForm extends StatelessWidget {
     return Form(
       child: Column(
         children: [
+
+          Image.asset(
+            "assets/images/logo.png",
+          
+          ),
           CustomTextInput(
             hintText: "Enter your email",
             labelText: "Email",
