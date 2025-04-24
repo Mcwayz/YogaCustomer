@@ -10,7 +10,7 @@ class CustomTextInput extends StatelessWidget {
   final FormFieldSetter<String>? onSaved;
 
   const CustomTextInput({
-    Key? key,
+    super.key,
     required this.hintText,
     required this.labelText,
     this.suffixIcon,
@@ -18,7 +18,7 @@ class CustomTextInput extends StatelessWidget {
     this.textInputAction = TextInputAction.done,
     this.onChanged,
     this.onSaved,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

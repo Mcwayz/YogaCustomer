@@ -88,7 +88,7 @@ class SignUpForm extends StatelessWidget {
 
           Image.asset(
             "assets/images/logo.png",
-          
+
           ),
           CustomTextInput(
             hintText: "Enter your email",
@@ -181,10 +181,10 @@ class SignUpForm extends StatelessWidget {
 
 class SocalCard extends StatelessWidget {
   const SocalCard({
-    Key? key,
+    super.key,
     required this.icon,
     required this.press,
-  }) : super(key: key);
+  });
 
   final Widget icon;
   final VoidCallback press;
