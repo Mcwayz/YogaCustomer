@@ -103,27 +103,7 @@ class SignInForm extends StatelessWidget {
             },
           
           ),
-          const SizedBox(height: 8),
-          GestureDetector(
-            onTap: () {
-              // Handle navigation to Forgot Password screen
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>  ChangePasswordScreen(), // Replace with your Forgot Password screen
-                ),
-              );
-            },
-            child: const Text(
-              "Forgot Password?",
-              style: TextStyle(
-                color: Color(0xFFFF7643),
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
+   
           ElevatedButton(
             onPressed: () {
               // Handle form submission
@@ -139,6 +119,27 @@ class SignInForm extends StatelessWidget {
             ),
             child: const Text("Continue"),
           ),
+          const SizedBox(height: 8),
+          GestureDetector(
+            onTap: () {
+              // Handle navigation to Forgot Password screen
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>  ChangePasswordScreen(), 
+                ),
+              );
+            },
+            child: const Text(
+              "Forgot Password?",
+              style: TextStyle(
+                color: Color(0xFFFF7643),
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
         ],
       ),
     );
