@@ -9,7 +9,7 @@ class SignInScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-       appBar: CustomAppBar(
+      appBar: const CustomAppBar(
         backgroundColor: Colors.white,
         title: "Sign In",
         centerTitle: true,
@@ -88,9 +88,7 @@ class SignInForm extends StatelessWidget {
             onChanged: (email) {
               // Handle email input change
             },
-            onSaved: (email) {
-              // Handle email save
-            },
+          
           ),
           const SizedBox(height: 24),
           CustomTextInput(
@@ -102,11 +100,29 @@ class SignInForm extends StatelessWidget {
             onChanged: (password) {
               // Handle password input change
             },
-            onSaved: (password) {
-              // Handle password save
-            },
+          
           ),
           const SizedBox(height: 8),
+          GestureDetector(
+            onTap: () {
+              // Handle navigation to Forgot Password screen
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ForgotPasswordScreen(), // Replace with your Forgot Password screen
+                ),
+              );
+            },
+            child: const Text(
+              "Forgot Password?",
+              style: TextStyle(
+                color: Color(0xFFFF7643),
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () {
               // Handle form submission
@@ -121,20 +137,6 @@ class SignInForm extends StatelessWidget {
               ),
             ),
             child: const Text("Continue"),
-          ),
-
-          const SizedBox(height: 16),
-          GestureDetector(
-            onTap: () {
-              // Handle forgot password
-            },
-            child: const Text(
-              "Forgot Password?",
-              style: TextStyle(
-                color: Color(0xFFFF7643),
-                fontSize: 16,
-              ),
-            ),
           ),
         ],
       ),
@@ -198,6 +200,7 @@ class NoAccountText extends StatelessWidget {
             "Sign Up",
             style: TextStyle(
               color: Color(0xFFFF7643),
+              fontWeight: FontWeight.bold,
             ),
           ),
         ),
