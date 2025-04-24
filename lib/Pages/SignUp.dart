@@ -22,7 +22,7 @@ class SignUpScreen extends StatelessWidget {
               const SizedBox(height: 16),
               // Logo
               Image.asset(
-                "assets/images/logo.png", // Replace with your logo path
+                "assets/logo.png", // Replace with your logo path
                 height: 100,
               ),
               const SizedBox(height: 16),
