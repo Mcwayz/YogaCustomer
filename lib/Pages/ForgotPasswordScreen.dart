@@ -18,7 +18,7 @@ class ChangePasswordScreen extends StatelessWidget {
               // Inline logo
               Image.asset(
                 "assets/logo.png", 
-                height: 100,
+                height: 150,
               ),
               const SizedBox(height: 16),
               // Title
