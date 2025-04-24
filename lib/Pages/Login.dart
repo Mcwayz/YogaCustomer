@@ -23,8 +23,8 @@ class SignInScreen extends StatelessWidget {
               const SizedBox(height: 16),
               // Logo
               Image.asset(
-                "assets/images/logo.png", // Replace with your logo path
-                height: 100,
+                "assets/logo.png", // Replace with your logo path
+                height: 150,
               ),
               const SizedBox(height: 16),
               // Welcome Text
