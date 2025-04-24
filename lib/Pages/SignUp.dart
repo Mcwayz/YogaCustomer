@@ -9,7 +9,7 @@ class SignUpScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: const Text("Sign Up"),
+        title: const Text(""),
       ),
       body: SafeArea(
         child: SizedBox(
