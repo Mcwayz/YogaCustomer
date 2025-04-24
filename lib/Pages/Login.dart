@@ -103,7 +103,8 @@ class SignInForm extends StatelessWidget {
             },
           
           ),
-   
+
+          const SizedBox(height: 8),
           ElevatedButton(
             onPressed: () {
               // Handle form submission
@@ -119,7 +120,7 @@ class SignInForm extends StatelessWidget {
             ),
             child: const Text("Continue"),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 16),
           GestureDetector(
             onTap: () {
               // Handle navigation to Forgot Password screen
@@ -135,11 +136,12 @@ class SignInForm extends StatelessWidget {
               style: TextStyle(
                 color: Color(0xFFFF7643),
                 fontSize: 16,
-                
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          
+          
         ],
       ),
     );
