@@ -1,7 +1,8 @@
 import 'package:customer_app/Pages/SignUp.dart';
 import 'package:flutter/material.dart';
 import '../component/CustomTextInput.dart';
-import '../component/customAppBar.dart'; // Import the CustomTextInput component
+import '../component/customAppBar.dart';
+import 'ForgotPasswordScreen.dart'; // Import the CustomTextInput component
 
 class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});
@@ -109,7 +110,7 @@ class SignInForm extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const ForgotPasswordScreen(), // Replace with your Forgot Password screen
+                  builder: (context) =>  ChangePasswordScreen(), // Replace with your Forgot Password screen
                 ),
               );
             },
