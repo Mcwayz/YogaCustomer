@@ -32,7 +32,10 @@ class _BookedClassesPageState extends State<BookedClassesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Booked Classes")),
+      appBar: CustomAppBar(
+        title: "Booked Classes",
+        centerTitle: false,
+      ),
       body: ListView.builder(
         itemCount: bookedClasses.length,
         itemBuilder: (context, index) {
