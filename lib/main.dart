@@ -6,10 +6,9 @@ import 'Pages/splash.dart';
 import 'Auth/Login.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  Firebase.initializeApp(); // Ensure Firebase is initialized
   runApp(const MyApp());
-    Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-);
 }
 
 class MyApp extends StatelessWidget {
