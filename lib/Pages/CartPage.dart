@@ -6,6 +6,7 @@ import '../component/customAppBar.dart';
 import '../component/BookingCard.dart'; // Import the BookingCard component
 
 class CartPage extends StatefulWidget {
+  
   const CartPage({super.key});
 
   @override
