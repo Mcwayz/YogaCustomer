@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart'; // Import FirebaseAuth for logout functionality
+import 'package:firebase_auth/firebase_auth.dart';
+
+import '../Auth/Login.dart'; // Import FirebaseAuth for logout functionality
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
