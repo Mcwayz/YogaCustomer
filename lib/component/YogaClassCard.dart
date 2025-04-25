@@ -108,8 +108,8 @@ class YogaClassCard extends StatelessWidget {
                     Text(
                       "Date: ${instance['date'] ?? "Unknown Date"}",
                       style: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey,
+                        fontSize: 13,
+                       // color: Colors.grey,
                       ),
                     ),
                     const SizedBox(height: 4), // Spacing between instances
