@@ -58,7 +58,7 @@ class YogaClassCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Teacher: ${yogaClass['teacher']}",
+                  "Teacher: ${yogaClass['class_instances']?.values.first['teacher'] ?? "Unknown"}",
                   style: const TextStyle(
                     fontSize: 12,
                     color: Colors.grey,
@@ -75,7 +75,7 @@ class YogaClassCard extends StatelessWidget {
             ),
             const SizedBox(height: 4), // Reduced spacing
             Text(
-              "Comments: ${yogaClass['class_instances'][1]?['comments'] ?? "None"}",
+              "Comments: ${yogaClass['class_instances']?.values.first['comments'] ?? "None"}",
               style: const TextStyle(
                 fontSize: 12,
                 color: Colors.grey,
@@ -83,7 +83,7 @@ class YogaClassCard extends StatelessWidget {
             ),
             const SizedBox(height: 4), // Reduced spacing
             Text(
-              "Date: ${yogaClass['class_instances'][1]?['date'] ?? "Unknown Date"}",
+              "Date: ${yogaClass['class_instances']?.values.first['date'] ?? "Unknown Date"}",
               style: const TextStyle(
                 fontSize: 12,
                 color: Colors.grey,
