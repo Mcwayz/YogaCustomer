@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../component/customAppBar.dart';
+
 class BookedClassesPage extends StatefulWidget {
   const BookedClassesPage({super.key});
 
