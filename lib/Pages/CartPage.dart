@@ -6,7 +6,8 @@ import '../component/customAppBar.dart';
 import '../component/BookingCard.dart'; // Import the BookingCard component
 
 class CartPage extends StatefulWidget {
-  const CartPage({super.key});
+    final Map<String, dynamic>? yogaClass; 
+  const CartPage({super.key, this.yogaClass}); // Optional parameter for yoga class
 
   @override
   State<CartPage> createState() => _CartPageState();
