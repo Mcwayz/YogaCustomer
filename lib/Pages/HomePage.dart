@@ -93,24 +93,24 @@ class _HomePageState extends State<HomePage> {
                   child: filteredClasses.isEmpty
                       ? const Center(child: Text("No classes found")) // Empty state message
                       : ListView.builder(
-                          itemCount: filteredClasses.length,
-                          itemBuilder: (context, index) {
-                            final yogaClass = filteredClasses[index];
-                            return Card(
-                              margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                              child: ListTile(
-                                title: Text(yogaClass['type'] ?? "Unknown Type"),
-                                subtitle: Text(
-                                  "${yogaClass['day']} at ${yogaClass['time']} | £${yogaClass['price']} | ${yogaClass['teacher']}",
-                                ),
-                                trailing: ElevatedButton(
-                                  onPressed: () => addToCart(yogaClass),
-                                  child: const Text("Add to Cart"),
-                                ),
+                        itemCount: filteredClasses.length,
+                        itemBuilder: (context, index) {
+                          final yogaClass = filteredClasses[index];
+                          return Card(
+                            margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                            child: ListTile(
+                              title: Text(yogaClass['type'] ?? "Unknown Type"),
+                              subtitle: Text(
+                                "${yogaClass['day']} at ${yogaClass['time']} | £${yogaClass['price']} | ${yogaClass['teacher']}",
                               ),
-                            );
-                          },
-                        ),
+                              trailing: ElevatedButton(
+                                onPressed: () => addToCart(yogaClass),
+                                child: const Text("Add to Cart"),
+                              ),
+                            ),
+                          );
+                        },
+                      )
                 ),
               ],
             ),
