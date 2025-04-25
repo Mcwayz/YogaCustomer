@@ -30,7 +30,7 @@ class YogaClassCard extends StatelessWidget {
       ),
       elevation: 2, // Reduced elevation for a flatter look
       child: Padding(
-        padding: const EdgeInsets.all(12.0), // Reduced padding
+        padding: const EdgeInsets.all(18.0), // Reduced padding
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -51,7 +51,7 @@ class YogaClassCard extends StatelessWidget {
                 Text(
                   "Day: ${yogaClass['day'] ?? "Unknown"}",
                   style: const TextStyle(
-                    fontSize: 12,
+                    fontSize: 13,
                     color: Colors.grey,
                   ),
                 ),
