@@ -20,26 +20,37 @@ class _BookedClassesPageState extends State<BookedClassesPage> {
     super.initState();
     fetchBookedClasses();
   }
+Future<void> fetchBookedClasses() async {
+  setState(() {
+    isLoading = true; // Show loading indicator
+  });
 
-  Future<void> fetchBookedClasses() async {
-    setState(() {
-      isLoading = true; // Show loading indicator
-    });
+  try {
+    final response = await http.get(
+      Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/Booked.json'),
+    );
 
-    try {
-      final response = await http.get(
-        Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/Booked.json'),
-      );
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      print("Fetched data: $data"); // Debug log
 
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        if (data != null) {
-          // Convert Firebase response into a list of Map<String, dynamic>
+      if (data != null) {
+        if (data is Map) {
+          // Handle Map structure
           final List<Map<String, dynamic>> fetchedClasses = data.entries.map((entry) {
             return {
-              'id': entry.key, // Firebase unique key
-              ...Map<String, dynamic>.from(entry.value), // Ensure proper typing
+              'id': entry.key,
+              ...Map<String, dynamic>.from(entry.value),
             };
+          }).toList();
+
+          setState(() {
+            bookedClasses = fetchedClasses;
+          });
+        } else if (data is List) {
+          // Handle List structure
+          final List<Map<String, dynamic>> fetchedClasses = data.map((item) {
+            return Map<String, dynamic>.from(item);
           }).toList();
 
           setState(() {
@@ -51,17 +62,21 @@ class _BookedClassesPageState extends State<BookedClassesPage> {
           });
         }
       } else {
-        print("Failed to fetch booked classes: ${response.reasonPhrase}");
+        setState(() {
+          bookedClasses = [];
+        });
       }
-    } catch (e) {
-      print("Error fetching booked classes: $e");
-    } finally {
-      setState(() {
-        isLoading = false; // Hide loading indicator
-      });
+    } else {
+      print("Failed to fetch booked classes: ${response.reasonPhrase}");
     }
+  } catch (e) {
+    print("Error fetching booked classes: $e");
+  } finally {
+    setState(() {
+      isLoading = false; // Hide loading indicator
+    });
   }
-
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
