@@ -106,7 +106,7 @@ class _CartPageState extends State<CartPage> {
         );
         fetchBookings();
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Booking moved to Booked successfully!")),
+          const SnackBar(content: Text("Booked successfully!")),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -130,7 +130,7 @@ class _CartPageState extends State<CartPage> {
         if (response.statusCode == 200) {
           fetchBookings(); // Refresh the bookings list
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Class removed from cart successfully!")),
+            const SnackBar(content: Text("Deleted successfully!")),
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
