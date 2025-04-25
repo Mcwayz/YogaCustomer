@@ -4,14 +4,14 @@ import 'package:firebase_auth/firebase_auth.dart'; // Import FirebaseAuth for lo
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final bool centerTitle;
-  final Color backgroundColor;
+  //final Color backgroundColor;
   final Color titleColor;
 
   const CustomAppBar({
     super.key,
     required this.title,
     this.centerTitle = true,
-    this.backgroundColor = Colors.white,
+    //this.backgroundColor = Colors.white,
     this.titleColor = Colors.black,
   });
 
@@ -27,7 +27,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: backgroundColor,
+     // backgroundColor: backgroundColor,
       centerTitle: centerTitle,
       title: Text(
         title,

@@ -71,7 +71,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
-        backgroundColor: Colors.white,
+        //backgroundColor: Colors.white,
         title: "",
         centerTitle: false,
       ),

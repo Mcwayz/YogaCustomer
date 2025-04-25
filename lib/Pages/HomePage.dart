@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../component/customAppBar.dart';
 import 'CartPage.dart';
 import 'BookedClassesPage.dart';
 import 'package:http/http.dart' as http;
