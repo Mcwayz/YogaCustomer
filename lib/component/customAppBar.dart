@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart'; // Import FirebaseAuth for logout functionality
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -14,6 +15,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.titleColor = Colors.black,
   });
 
+  Future<void> _logout(BuildContext context) async {
+    try {
+      await FirebaseAuth.instance.signOut(); // Sign out the user
+      Navigator.popUntil(context, (route) => route.isFirst); // Navigate to the first screen
+    } catch (e) {
+      print("Error logging out: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -28,6 +38,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       elevation: 0,
+      leading: IconButton(
+        icon: const Icon(Icons.logout, color: Colors.black), // Logout icon
+        onPressed: () => _logout(context), // Call the logout function
+      ),
     );
   }
 
