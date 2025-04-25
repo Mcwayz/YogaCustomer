@@ -63,17 +63,13 @@ class _SignInScreenState extends State<SignInScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CustomAppBar(
-        backgroundColor: Colors.white,
-        title: "",
-        centerTitle: false,
-      ),
+     
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             children: [
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
               // Logo
               Image.asset(
                 "assets/logo.png", // Replace with your logo path
