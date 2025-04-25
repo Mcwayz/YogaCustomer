@@ -6,7 +6,9 @@ import '../component/customAppBar.dart';
 import '../component/BookingCard.dart'; // Import the BookingCard component
 
 class CartPage extends StatefulWidget {
-  const CartPage({super.key});
+  final Map<String, dynamic>? yogaClass; // Add yogaClass as an optional parameter
+
+  const CartPage({super.key, this.yogaClass}); // Add yogaClass to the constructor
 
   @override
   State<CartPage> createState() => _CartPageState();
@@ -63,40 +65,6 @@ class _CartPageState extends State<CartPage> {
     }
   }
 
-  Future<void> moveToBooked(String bookingId, Map<String, dynamic> booking) async {
-    try {
-      // Send the booking to the "Booked" node
-      final response = await http.post(
-        Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/Booked.json'),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode(booking),
-      );
-
-      if (response.statusCode == 200) {
-        // Remove the booking from the "bookings" node
-        await http.delete(
-          Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/bookings/$bookingId.json'),
-        );
-
-        // Refresh the bookings list
-        fetchBookings();
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Booking moved to Booked successfully!")),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Failed to move booking: ${response.reasonPhrase}")),
-        );
-      }
-    } catch (e) {
-      print("Error moving booking: $e");
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("An error occurred. Please try again.")),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,7 +82,9 @@ class _CartPageState extends State<CartPage> {
                     final booking = bookings[index];
                     return BookingCard(
                       booking: booking,
-                      onSlideToBook: () => moveToBooked(booking['id'], booking),
+                      onSlideToBook: () {
+                        // Handle slide to book functionality here
+                      },
                     );
                   },
                 ),
