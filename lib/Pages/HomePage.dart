@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../component/customAppBar.dart';
 import 'CartPage.dart';
-import 'BookedClassesPage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -29,11 +28,15 @@ class _HomePageState extends State<HomePage> {
       isLoading = true; // Show loading indicator
     });
     try {
-      final response = await http.get(Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/courses'));
+      final response = await http.get(
+        Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/courses.json'),
+      );
       if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+        final List<dynamic> classes = data.values.toList(); // Convert map values to a list
         setState(() {
-          yogaClasses = json.decode(response.body);
-          filteredClasses = yogaClasses;
+          yogaClasses = classes;
+          filteredClasses = classes;
         });
       } else {
         throw Exception("Failed to fetch classes");
@@ -98,8 +101,10 @@ class _HomePageState extends State<HomePage> {
                             return Card(
                               margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                               child: ListTile(
-                                title: Text(yogaClass['name']),
-                                subtitle: Text("${yogaClass['day']} at ${yogaClass['time']}"),
+                                title: Text(yogaClass['type'] ?? "Unknown Type"),
+                                subtitle: Text(
+                                  "${yogaClass['day']} at ${yogaClass['time']} | £${yogaClass['price']} | ${yogaClass['teacher']}",
+                                ),
                                 trailing: ElevatedButton(
                                   onPressed: () => addToCart(yogaClass),
                                   child: const Text("Add to Cart"),
