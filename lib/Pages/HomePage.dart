@@ -23,33 +23,32 @@ class _HomePageState extends State<HomePage> {
     fetchYogaClasses();
   }
 
-        Future<void> fetchYogaClasses() async {
-      setState(() {
-        isLoading = true; // Show loading indicator
-      });
-      try {
-        final response = await http.get(
-          Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/courses.json'),
-        );
-        if (response.statusCode == 200) {
-          final Map<String, dynamic> data = json.decode(response.body);
-          final List<dynamic> classes = data.values.toList(); // Convert map values to a list
+            Future<void> fetchYogaClasses() async {
           setState(() {
-            yogaClasses = classes;
-            filteredClasses = classes;
+            isLoading = true; // Show loading indicator
           });
-          print("Fetched classes: $classes"); // Debug log
-        } else {
-          throw Exception("Failed to fetch classes. Status code: ${response.statusCode}");
+          try {
+            final response = await http.get(
+              Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/courses.json'),
+            );
+            if (response.statusCode == 200) {
+              final List<dynamic> classes = json.decode(response.body); // Parse response as a List
+              setState(() {
+                yogaClasses = classes;
+                filteredClasses = classes;
+              });
+              print("Fetched classes: $classes"); // Debug log
+            } else {
+              throw Exception("Failed to fetch classes. Status code: ${response.statusCode}");
+            }
+          } catch (e) {
+            print("Error fetching classes: $e"); // Log error to the terminal
+          } finally {
+            setState(() {
+              isLoading = false; // Hide loading indicator
+            });
+          }
         }
-      } catch (e) {
-        print("Error fetching classes: $e"); // Log error to the terminal
-      } finally {
-        setState(() {
-          isLoading = false; // Hide loading indicator
-        });
-      }
-    }
 
   void filterClasses(String query) {
     setState(() {
