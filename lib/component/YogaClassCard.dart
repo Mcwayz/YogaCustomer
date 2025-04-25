@@ -120,8 +120,8 @@ class YogaClassCard extends StatelessWidget {
               Text(
                 "No class instances available for ${yogaClass['type'] ?? "this class"}",
                 style: const TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey,
+                  fontSize: 13,
+                  //color: Colors.grey,
                 ),
               ),
             const SizedBox(height: 8), // Reduced spacing
