@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 import '../component/customAppBar.dart';
 
@@ -24,33 +25,67 @@ class _CartPageState extends State<CartPage> {
     }
   }
 
+  bool isValidEmail(String email) {
+    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+    return emailRegex.hasMatch(email);
+  }
+
   Future<void> submitCart() async {
     final email = emailController.text;
-    if (email.isEmpty) {
+
+    // Validate email
+    if (email.isEmpty || !isValidEmail(email)) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please enter your email")),
+        const SnackBar(content: Text("Please enter a valid email address")),
       );
       return;
     }
 
-    final response = await http.post(
-      Uri.parse('https://your-cloud-service/api/bookings'),
-      body: {
-        'email': email,
-        'classes': cart.map((c) => c['id']).toList(),
-      },
-    );
-
-    if (response.statusCode == 200) {
+    // Check if cart is empty
+    if (cart.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Booking submitted successfully")),
+        const SnackBar(content: Text("Your cart is empty")),
       );
-      setState(() {
-        cart.clear();
-      });
-    } else {
+      return;
+    }
+
+    try {
+      // Send data to Firebase
+      final response = await http.post(
+        Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/bookings.json'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({
+          'email': email,
+          'classes': cart.map((c) => {
+                'classId': c['id'],
+                'type': c['type'],
+                'day': c['day'],
+                'time': c['time'],
+                'price': c['price'],
+              }).toList(),
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        // Show success message
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Booking submitted successfully")),
+        );
+        setState(() {
+          cart.clear();
+          emailController.clear(); // Clear email field
+        });
+      } else {
+        // Handle error response
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Failed to submit booking: ${response.reasonPhrase}")),
+        );
+      }
+    } catch (e) {
+      // Handle network or other errors
+      print("Error submitting cart: $e");
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Failed to submit booking")),
+        const SnackBar(content: Text("An error occurred. Please try again.")),
       );
     }
   }
@@ -65,24 +100,26 @@ class _CartPageState extends State<CartPage> {
       body: Column(
         children: [
           Expanded(
-            child: ListView.builder(
-              itemCount: cart.length,
-              itemBuilder: (context, index) {
-                final yogaClass = cart[index];
-                return ListTile(
-                  title: Text(yogaClass['name']),
-                  subtitle: Text("${yogaClass['day']} at ${yogaClass['time']}"),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () {
-                      setState(() {
-                        cart.removeAt(index);
-                      });
+            child: cart.isEmpty
+                ? const Center(child: Text("Your cart is empty")) // Empty cart message
+                : ListView.builder(
+                    itemCount: cart.length,
+                    itemBuilder: (context, index) {
+                      final yogaClass = cart[index];
+                      return ListTile(
+                        title: Text(yogaClass['type']), // Use 'type' instead of 'name'
+                        subtitle: Text("${yogaClass['day']} at ${yogaClass['time']}"),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.delete),
+                          onPressed: () {
+                            setState(() {
+                              cart.removeAt(index);
+                            });
+                          },
+                        ),
+                      );
                     },
                   ),
-                );
-              },
-            ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
