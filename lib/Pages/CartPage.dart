@@ -34,7 +34,7 @@ class _CartPageState extends State<CartPage> {
 
     try {
       final response = await http.get(
-        Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/cart.json'),
+        Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/bookings.json'),
       );
 
       if (response.statusCode == 200) {
@@ -56,16 +56,9 @@ class _CartPageState extends State<CartPage> {
             bookings = [];
           });
         }
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Failed to fetch bookings: ${response.reasonPhrase}")),
-        );
       }
     } catch (e) {
       print("Error fetching bookings: $e");
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("An error occurred while fetching bookings.")),
-      );
     } finally {
       setState(() {
         isLoading = false;
@@ -128,31 +121,33 @@ class _CartPageState extends State<CartPage> {
     }
   }
 
-  Future<void> deleteFromCart(String bookingId) async {
-    try {
-      final response = await http.delete(
-        Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/cart/$bookingId.json'),
-      );
-
-      if (response.statusCode == 200) {
-        setState(() {
-          bookings.removeWhere((booking) => booking['id'] == bookingId);
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Class removed from cart successfully!")),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Failed to delete: ${response.reasonPhrase}")),
-        );
-      }
-    } catch (e) {
-      print("Error deleting from cart: $e");
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("An error occurred. Please try again.")),
-      );
-    }
-  }
+               Future<void> deleteFromCart(String bookingId) async {
+          try {
+            // Use the DELETE method to remove the specific booking from Firebase
+            final response = await http.delete(
+              Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/cart/$bookingId.json'),
+            );
+        
+            if (response.statusCode == 200) {
+              // Refresh the bookings list after successful deletion
+              fetchBookings();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("Deleted successfully!")),
+              );
+            } else {
+              // Show error message if deletion fails
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text("Failed to delete: ${response.reasonPhrase}")),
+              );
+            }
+          } catch (e) {
+            // Handle any exceptions that occur during the deletion process
+            print("Error deleting from cart: $e");
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("An error occurred. Please try again.")),
+            );
+          }
+        }
 
   @override
   Widget build(BuildContext context) {
