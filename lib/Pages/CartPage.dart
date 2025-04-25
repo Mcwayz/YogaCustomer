@@ -3,38 +3,43 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import '../component/customAppBar.dart';
-import '../component/BookingCard.dart'; // Import the BookingCard component
+import '../component/BookingCard.dart';
 
 class CartPage extends StatefulWidget {
-    final Map<String, dynamic>? yogaClass; 
-  const CartPage({super.key, this.yogaClass}); // Optional parameter for yoga class
+  final Map<String, dynamic>? yogaClass;
+
+  const CartPage({super.key, this.yogaClass});
 
   @override
   State<CartPage> createState() => _CartPageState();
 }
 
 class _CartPageState extends State<CartPage> {
-  List<Map<String, dynamic>> bookings = []; // List to store bookings
-  bool isLoading = true; // Loading state
+  List<Map<String, dynamic>> bookings = [];
+  bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    fetchBookings(); // Fetch bookings from Firebase
+    if (widget.yogaClass != null) {
+      addToCart(widget.yogaClass!);
+    }
+    fetchBookings();
   }
 
   Future<void> fetchBookings() async {
     setState(() {
-      isLoading = true; // Show loading indicator
+      isLoading = true;
     });
 
     try {
       final response = await http.get(
-        Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/cart.json'),
+        Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/bookings.json'),
       );
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
+
         if (data != null && data is Map) {
           final List<Map<String, dynamic>> fetchedBookings = data.entries.map((entry) {
             return {
@@ -51,15 +56,39 @@ class _CartPageState extends State<CartPage> {
             bookings = [];
           });
         }
-      } else {
-        print("Failed to fetch bookings: ${response.reasonPhrase}");
       }
     } catch (e) {
       print("Error fetching bookings: $e");
     } finally {
       setState(() {
-        isLoading = false; // Hide loading indicator
+        isLoading = false;
       });
+    }
+  }
+
+  Future<void> addToCart(Map<String, dynamic> yogaClass) async {
+    try {
+      final response = await http.post(
+        Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/cart.json'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(yogaClass),
+      );
+
+      if (response.statusCode == 200) {
+        fetchBookings();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Class added to cart successfully!")),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Failed to add to cart: ${response.reasonPhrase}")),
+        );
+      }
+    } catch (e) {
+      print("Error adding to cart: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("An error occurred. Please try again.")),
+      );
     }
   }
 
@@ -75,12 +104,11 @@ class _CartPageState extends State<CartPage> {
         await http.delete(
           Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/cart/$bookingId.json'),
         );
-        fetchBookings(); // Refresh the bookings list
+        fetchBookings();
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Booking moved to Booked successfully!")),
         );
       } else {
-        print("Failed to move booking: ${response.reasonPhrase}");
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Failed to move booking: ${response.reasonPhrase}")),
         );
@@ -100,12 +128,11 @@ class _CartPageState extends State<CartPage> {
       );
 
       if (response.statusCode == 200) {
-        fetchBookings(); // Refresh the bookings list
+        fetchBookings();
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Class removed from cart successfully!")),
         );
       } else {
-        print("Failed to delete booking: ${response.reasonPhrase}");
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Failed to delete: ${response.reasonPhrase}")),
         );
@@ -126,17 +153,17 @@ class _CartPageState extends State<CartPage> {
         centerTitle: false,
       ),
       body: isLoading
-          ? const Center(child: CircularProgressIndicator()) // Show loading indicator
+          ? const Center(child: CircularProgressIndicator())
           : bookings.isEmpty
-              ? const Center(child: Text("Your cart is empty")) // Empty cart message
+              ? const Center(child: Text("Your cart is empty"))
               : ListView.builder(
                   itemCount: bookings.length,
                   itemBuilder: (context, index) {
                     final booking = bookings[index];
                     return BookingCard(
                       booking: booking,
-                      onSlideToBook: () => moveToBooked(booking['id'], booking), // Move to Booked
-                      onDelete: () => deleteFromCart(booking['id']), // Delete from cart
+                      onSlideToBook: () => moveToBooked(booking['id'], booking),
+                      onDelete: () => deleteFromCart(booking['id']),
                     );
                   },
                 ),
