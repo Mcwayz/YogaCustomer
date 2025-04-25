@@ -113,9 +113,9 @@ class YogaClassCard extends StatelessWidget {
                 );
               }).toList()
             else
-              const Text(
-                "No class instances available",
-                style: TextStyle(
+              Text(
+                "No class instances available for ${yogaClass['type'] ?? "this class"}",
+                style: const TextStyle(
                   fontSize: 12,
                   color: Colors.grey,
                 ),
