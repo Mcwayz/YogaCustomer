@@ -12,6 +12,13 @@ class YogaClassCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Safely access the first class instance if available
+    final classInstance = (yogaClass['class_instances'] != null &&
+            yogaClass['class_instances'] is List &&
+            yogaClass['class_instances'].isNotEmpty)
+        ? yogaClass['class_instances'][0]
+        : null;
+
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12), // Reduced margin
       shape: RoundedRectangleBorder(
@@ -38,14 +45,14 @@ class YogaClassCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Day: ${yogaClass['day']}",
+                  "Day: ${yogaClass['day'] ?? "Unknown"}",
                   style: const TextStyle(
                     fontSize: 12,
                     color: Colors.grey,
                   ),
                 ),
                 Text(
-                  "Time: ${yogaClass['time']}",
+                  "Time: ${yogaClass['time'] ?? "Unknown"}",
                   style: const TextStyle(
                     fontSize: 12,
                     color: Colors.grey,
@@ -58,14 +65,14 @@ class YogaClassCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Teacher: ${yogaClass['class_instances']?.values.first['teacher'] ?? "Unknown"}",
+                  "Teacher: ${classInstance?['teacher'] ?? "Unknown"}",
                   style: const TextStyle(
                     fontSize: 12,
                     color: Colors.grey,
                   ),
                 ),
                 Text(
-                  "Capacity: ${yogaClass['capacity']}",
+                  "Capacity: ${yogaClass['capacity'] ?? "Unknown"}",
                   style: const TextStyle(
                     fontSize: 12,
                     color: Colors.grey,
@@ -75,7 +82,7 @@ class YogaClassCard extends StatelessWidget {
             ),
             const SizedBox(height: 4), // Reduced spacing
             Text(
-              "Comments: ${yogaClass['class_instances']?.values.first['comments'] ?? "None"}",
+              "Comments: ${classInstance?['comments'] ?? "None"}",
               style: const TextStyle(
                 fontSize: 12,
                 color: Colors.grey,
@@ -83,7 +90,7 @@ class YogaClassCard extends StatelessWidget {
             ),
             const SizedBox(height: 4), // Reduced spacing
             Text(
-              "Date: ${yogaClass['class_instances']?.values.first['date'] ?? "Unknown Date"}",
+              "Date: ${classInstance?['date'] ?? "Unknown Date"}",
               style: const TextStyle(
                 fontSize: 12,
                 color: Colors.grey,
