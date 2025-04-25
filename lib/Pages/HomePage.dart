@@ -110,10 +110,6 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-<<<<<<< HEAD
-=======
-
->>>>>>> ed40b4bf01d70cac366a4c649bf1cb407e9b8f5f
     );
   }
 }
