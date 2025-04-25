@@ -101,8 +101,8 @@ class YogaClassCard extends StatelessWidget {
                     Text(
                       "Comments: ${instance['comments'] ?? "None"}",
                       style: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey,
+                        fontSize: 13,
+                        //color: Colors.grey,
                       ),
                     ),
                     Text(
