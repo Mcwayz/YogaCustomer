@@ -14,9 +14,9 @@ class YogaClassCard extends StatelessWidget {
   Widget build(BuildContext context) {
     // Safely access the first class instance if available
     final classInstance = (yogaClass['class_instances'] != null &&
-            yogaClass['class_instances'] is List &&
+            yogaClass['class_instances'] is Map &&
             yogaClass['class_instances'].isNotEmpty)
-        ? yogaClass['class_instances'][0]
+        ? yogaClass['class_instances'].values.first
         : null;
 
     return Card(
