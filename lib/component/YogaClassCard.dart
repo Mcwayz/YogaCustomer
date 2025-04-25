@@ -94,8 +94,8 @@ class YogaClassCard extends StatelessWidget {
                     Text(
                       "Teacher: ${instance['teacher'] ?? "Unknown"}",
                       style: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey,
+                        fontSize: 13,
+                        //color: Colors.grey,
                       ),
                     ),
                     Text(
