@@ -124,7 +124,7 @@ class YogaClassCard extends StatelessWidget {
                   //color: Colors.grey,
                 ),
               ),
-            const SizedBox(height: 8), // Reduced spacing
+            //const SizedBox(height: 4), // Reduced spacing
             // Add to Cart Button
             Align(
               alignment: Alignment.centerRight,
