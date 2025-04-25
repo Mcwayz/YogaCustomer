@@ -82,35 +82,44 @@ class YogaClassCard extends StatelessWidget {
             ),
             const SizedBox(height: 8), // Reduced spacing
             // Display all class instances
-            ...classInstances.map((instance) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Teacher: ${instance['teacher'] ?? "Unknown"}",
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey,
+            if (classInstances.isNotEmpty)
+              ...classInstances.map((instance) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Teacher: ${instance['teacher'] ?? "Unknown"}",
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey,
+                      ),
                     ),
-                  ),
-                  Text(
-                    "Comments: ${instance['comments'] ?? "None"}",
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey,
+                    Text(
+                      "Comments: ${instance['comments'] ?? "None"}",
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey,
+                      ),
                     ),
-                  ),
-                  Text(
-                    "Date: ${instance['date'] ?? "Unknown Date"}",
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey,
+                    Text(
+                      "Date: ${instance['date'] ?? "Unknown Date"}",
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 4), // Spacing between instances
-                ],
-              );
-            }).toList(),
+                    const SizedBox(height: 4), // Spacing between instances
+                  ],
+                );
+              }).toList()
+            else
+              const Text(
+                "No class instances available",
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey,
+                ),
+              ),
             const SizedBox(height: 8), // Reduced spacing
             // Add to Cart Button
             Align(
