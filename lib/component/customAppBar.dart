@@ -4,26 +4,28 @@ import 'package:firebase_auth/firebase_auth.dart'; // Import FirebaseAuth for lo
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final bool centerTitle;
-  //final Color backgroundColor;
+  final Color backgroundColor;
   final Color titleColor;
 
   const CustomAppBar({
     super.key,
     required this.title,
     this.centerTitle = true,
-    //this.backgroundColor = Colors.white,
+    this.backgroundColor = Colors.white,
     this.titleColor = Colors.black,
   });
-
-  Future<void> _logout(BuildContext context) async {
-    try {
-      await FirebaseAuth.instance.signOut(); // Sign out the user
-      Navigator.popUntil(context, (route) => route.isFirst); // Navigate to the first screen
-    } catch (e) {
-      print("Error logging out: $e");
-    }
+Future<void> _logout(BuildContext context) async {
+  try {
+    await FirebaseAuth.instance.signOut(); // Sign out the user
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const SignInScreen()),
+      (route) => false, // Remove all previous routes
+    );
+  } catch (e) {
+    print("Error logging out: $e");
   }
-
+}
   @override
   Widget build(BuildContext context) {
     return AppBar(
