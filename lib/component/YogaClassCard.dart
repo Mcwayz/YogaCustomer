@@ -13,10 +13,14 @@ class YogaClassCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Safely access all class instances if available
-    final classInstances = (yogaClass['class_instances'] != null &&
-            yogaClass['class_instances'] is Map &&
-            yogaClass['class_instances'].isNotEmpty)
-        ? yogaClass['class_instances'].values.toList()
+    final classInstances = (yogaClass['class_instances'] != null)
+        ? (yogaClass['class_instances'] is Map
+            ? yogaClass['class_instances'].values.toList()
+            : yogaClass['class_instances'] is List
+                ? yogaClass['class_instances']
+                    .where((instance) => instance != null) // Filter out null entries
+                    .toList()
+                : [])
         : [];
 
     return Card(
