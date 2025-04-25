@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../component/customAppBar.dart';
+import '../Pages/MainNavigation.dart'; // Import MainNavigation
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -29,9 +30,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
         email: email,
         password: password,
       );
-      // Navigate to the next screen or show success message
-      print("User registered: ${credential.user?.email}");
-      Navigator.pop(context); // Navigate back to Sign In screen
+      // Navigate to MainNavigation after successful signup
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const MainNavigation(),
+        ),
+      );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         _showErrorDialog("The password provided is too weak.");
