@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
     fetchYogaClasses();
   }
 
-  Future<void> fetchYogaClasses() async {
+    Future<void> fetchYogaClasses() async {
     setState(() {
       isLoading = true; // Show loading indicator
     });
@@ -38,6 +38,7 @@ class _HomePageState extends State<HomePage> {
           yogaClasses = classes;
           filteredClasses = classes;
         });
+        print("Fetched classes: $classes"); // Debug log
       } else {
         throw Exception("Failed to fetch classes");
       }
