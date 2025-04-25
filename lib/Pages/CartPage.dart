@@ -3,18 +3,17 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import '../component/customAppBar.dart';
-import '../component/BookingCard.dart'; // Import the new BookingCard component
+import '../component/BookingCard.dart'; // Import the BookingCard component
 
 class CartPage extends StatefulWidget {
-   final dynamic yogaClass; 
-  const CartPage({super.key, this.yogaClass});
+  const CartPage({super.key});
 
   @override
   State<CartPage> createState() => _CartPageState();
 }
 
 class _CartPageState extends State<CartPage> {
-  List<dynamic> bookings = []; // List to store all bookings
+  List<Map<String, dynamic>> bookings = []; // Ensure bookings is a list of Map<String, dynamic>
   bool isLoading = true; // Loading state
 
   @override
@@ -32,11 +31,11 @@ class _CartPageState extends State<CartPage> {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         if (data != null) {
-          // Convert the Firebase response into a list
-          final List<dynamic> fetchedBookings = data.entries.map((entry) {
+          // Convert the Firebase response into a list of Map<String, dynamic>
+          final List<Map<String, dynamic>> fetchedBookings = data.entries.map((entry) {
             return {
               'id': entry.key, // Firebase unique key
-              ...entry.value, // Booking details
+              ...Map<String, dynamic>.from(entry.value), // Ensure the value is cast to Map<String, dynamic>
             };
           }).toList();
 
