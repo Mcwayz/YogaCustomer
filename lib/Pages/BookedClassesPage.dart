@@ -65,6 +65,8 @@ class _BookedClassesPageState extends State<BookedClassesPage> {
             bookedClasses = [];
           });
         }
+      } else {
+        print("Failed to fetch booked classes: ${response.reasonPhrase}");
       }
     } catch (e) {
       print("Error fetching booked classes: $e");
@@ -86,12 +88,20 @@ class _BookedClassesPageState extends State<BookedClassesPage> {
           ? const Center(child: CircularProgressIndicator())
           : bookedClasses.isEmpty
               ? const Center(child: Text("No booked classes found"))
-              : ListView.builder(
-                  itemCount: bookedClasses.length,
-                  itemBuilder: (context, index) {
-                    final yogaClass = bookedClasses[index];
-                    return BookedClassCard(yogaClass: yogaClass);
-                  },
+              : SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      ListView.builder(
+                        shrinkWrap: true, // Ensures the ListView takes only the necessary space
+                        physics: const NeverScrollableScrollPhysics(), // Prevents nested scrolling
+                        itemCount: bookedClasses.length,
+                        itemBuilder: (context, index) {
+                          final yogaClass = bookedClasses[index];
+                          return BookedClassCard(yogaClass: yogaClass);
+                        },
+                      ),
+                    ],
+                  ),
                 ),
     );
   }
