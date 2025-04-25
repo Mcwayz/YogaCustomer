@@ -28,16 +28,16 @@ class _CartPageState extends State<CartPage> {
     fetchBookings(); // Fetch bookings from Firebase
   }
 
-  Future<void> fetchBookings() async {
+   Future<void> fetchBookings() async {
     setState(() {
       isLoading = true; // Show loading indicator
     });
-
+  
     try {
       final response = await http.get(
-        Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/cart.json'),
+        Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/bookings.json'),
       );
-
+  
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         if (data != null) {
@@ -48,7 +48,7 @@ class _CartPageState extends State<CartPage> {
               ...Map<String, dynamic>.from(entry.value), // Ensure proper typing
             };
           }).toList();
-
+  
           setState(() {
             bookings = fetchedBookings;
           });
@@ -166,8 +166,8 @@ class _CartPageState extends State<CartPage> {
                     final booking = bookings[index];
                     return BookingCard(
                       booking: booking,
-                      onSlideToBook: () => moveToBooked(booking['id'], booking),
-                      onDelete: () => deleteFromCart(booking['id']),
+                      onSlideToBook: () => moveToBooked(booking['id'], booking), // Move to Booked
+                      onDelete: () => deleteFromCart(booking['id']), // Delete from cart
                     );
                   },
                 ),
