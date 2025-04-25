@@ -6,9 +6,7 @@ import '../component/customAppBar.dart';
 import '../component/BookingCard.dart'; // Import the BookingCard component
 
 class CartPage extends StatefulWidget {
-  final Map<String, dynamic>? yogaClass; // Accept yogaClass as an optional parameter
-
-  const CartPage({super.key, this.yogaClass}); // Add yogaClass to the constructor
+  const CartPage({super.key});
 
   @override
   State<CartPage> createState() => _CartPageState();
@@ -21,54 +19,32 @@ class _CartPageState extends State<CartPage> {
   @override
   void initState() {
     super.initState();
-    if (widget.yogaClass != null) {
-      // Add the passed yogaClass to the bookings list
-      addToCart(widget.yogaClass!);
-    }
     fetchBookings(); // Fetch bookings from Firebase
   }
 
-     Future<void> fetchBookings() async {
+  Future<void> fetchBookings() async {
     setState(() {
       isLoading = true; // Show loading indicator
     });
-  
+
     try {
       final response = await http.get(
-        Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/bookings.json'),
+        Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/cart.json'),
       );
-  
+
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        print("Fetched data: $data"); // Debug log
-  
-        if (data != null) {
-          if (data is Map) {
-            // Handle Map structure
-            final List<Map<String, dynamic>> fetchedBookings = data.entries.map((entry) {
-              return {
-                'id': entry.key,
-                ...Map<String, dynamic>.from(entry.value),
-              };
-            }).toList();
-  
-            setState(() {
-              bookings = fetchedBookings;
-            });
-          } else if (data is List) {
-            // Handle List structure
-            final List<Map<String, dynamic>> fetchedBookings = data.map((item) {
-              return Map<String, dynamic>.from(item);
-            }).toList();
-  
-            setState(() {
-              bookings = fetchedBookings;
-            });
-          } else {
-            setState(() {
-              bookings = [];
-            });
-          }
+        if (data != null && data is Map) {
+          final List<Map<String, dynamic>> fetchedBookings = data.entries.map((entry) {
+            return {
+              'id': entry.key,
+              ...Map<String, dynamic>.from(entry.value),
+            };
+          }).toList();
+
+          setState(() {
+            bookings = fetchedBookings;
+          });
         } else {
           setState(() {
             bookings = [];
@@ -85,35 +61,9 @@ class _CartPageState extends State<CartPage> {
       });
     }
   }
-  Future<void> addToCart(Map<String, dynamic> yogaClass) async {
-    try {
-      final response = await http.post(
-        Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/cart.json'),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode(yogaClass),
-      );
-
-      if (response.statusCode == 200) {
-        fetchBookings(); // Refresh the bookings list
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Class added to cart successfully!")),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Failed to add to cart: ${response.reasonPhrase}")),
-        );
-      }
-    } catch (e) {
-      print("Error adding to cart: $e");
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("An error occurred. Please try again.")),
-      );
-    }
-  }
 
   Future<void> moveToBooked(String bookingId, Map<String, dynamic> booking) async {
     try {
-      // Send the booking to the "Booked" node
       final response = await http.post(
         Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/Booked.json'),
         headers: {'Content-Type': 'application/json'},
@@ -121,18 +71,15 @@ class _CartPageState extends State<CartPage> {
       );
 
       if (response.statusCode == 200) {
-        // Remove the booking from the "cart" node
         await http.delete(
           Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/cart/$bookingId.json'),
         );
-
-        // Refresh the bookings list
-        fetchBookings();
-
+        fetchBookings(); // Refresh the bookings list
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Booking moved to Booked successfully!")),
         );
       } else {
+        print("Failed to move booking: ${response.reasonPhrase}");
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Failed to move booking: ${response.reasonPhrase}")),
         );
@@ -145,27 +92,25 @@ class _CartPageState extends State<CartPage> {
     }
   }
 
-    Future<void> deleteFromCart(String bookingId) async {
+  Future<void> deleteFromCart(String bookingId) async {
     try {
-      print("Deleting booking with ID: $bookingId"); // Debug log
       final response = await http.delete(
         Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/cart/$bookingId.json'),
       );
-  
+
       if (response.statusCode == 200) {
-        print("Booking deleted successfully"); // Debug log
         fetchBookings(); // Refresh the bookings list
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Class removed from cart successfully!")),
         );
       } else {
-        print("Failed to delete booking: ${response.reasonPhrase}"); // Debug log
+        print("Failed to delete booking: ${response.reasonPhrase}");
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Failed to delete: ${response.reasonPhrase}")),
         );
       }
     } catch (e) {
-      print("Error deleting from cart: $e"); // Debug log
+      print("Error deleting from cart: $e");
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("An error occurred. Please try again.")),
       );
