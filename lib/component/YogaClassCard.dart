@@ -71,8 +71,8 @@ class YogaClassCard extends StatelessWidget {
                 Text(
                   "Capacity: ${yogaClass['capacity'] ?? "Unknown"}",
                   style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey,
+                    fontSize: 13,
+                    //color: Colors.grey,
                   ),
                 ),
                 Text(
