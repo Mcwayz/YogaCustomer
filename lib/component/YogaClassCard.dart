@@ -12,12 +12,12 @@ class YogaClassCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Safely access the first class instance if available
-    final classInstance = (yogaClass['class_instances'] != null &&
+    // Safely access all class instances if available
+    final classInstances = (yogaClass['class_instances'] != null &&
             yogaClass['class_instances'] is Map &&
             yogaClass['class_instances'].isNotEmpty)
-        ? yogaClass['class_instances'].values.first
-        : null;
+        ? yogaClass['class_instances'].values.toList()
+        : [];
 
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12), // Reduced margin
@@ -65,14 +65,14 @@ class YogaClassCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Teacher: ${classInstance?['teacher'] ?? "Unknown"}",
+                  "Capacity: ${yogaClass['capacity'] ?? "Unknown"}",
                   style: const TextStyle(
                     fontSize: 12,
                     color: Colors.grey,
                   ),
                 ),
                 Text(
-                  "Capacity: ${yogaClass['capacity'] ?? "Unknown"}",
+                  "Price: £${yogaClass['price'] ?? "Unknown"}",
                   style: const TextStyle(
                     fontSize: 12,
                     color: Colors.grey,
@@ -80,22 +80,37 @@ class YogaClassCard extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 4), // Reduced spacing
-            Text(
-              "Comments: ${classInstance?['comments'] ?? "None"}",
-              style: const TextStyle(
-                fontSize: 12,
-                color: Colors.grey,
-              ),
-            ),
-            const SizedBox(height: 4), // Reduced spacing
-            Text(
-              "Date: ${classInstance?['date'] ?? "Unknown Date"}",
-              style: const TextStyle(
-                fontSize: 12,
-                color: Colors.grey,
-              ),
-            ),
+            const SizedBox(height: 8), // Reduced spacing
+            // Display all class instances
+            ...classInstances.map((instance) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Teacher: ${instance['teacher'] ?? "Unknown"}",
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  Text(
+                    "Comments: ${instance['comments'] ?? "None"}",
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  Text(
+                    "Date: ${instance['date'] ?? "Unknown Date"}",
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  const SizedBox(height: 4), // Spacing between instances
+                ],
+              );
+            }).toList(),
             const SizedBox(height: 8), // Reduced spacing
             // Add to Cart Button
             Align(
