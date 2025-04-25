@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import '../component/customAppBar.dart';
+
 class CartPage extends StatefulWidget {
   final dynamic yogaClass;
 
