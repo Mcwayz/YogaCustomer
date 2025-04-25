@@ -76,7 +76,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             children: [
-              const SizedBox(height: 16),
+                 const SizedBox(height: 70),
               // Logo
               Image.asset(
                 "assets/logo.png", // Replace with your logo path
