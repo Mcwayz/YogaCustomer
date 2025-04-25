@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class BookingCard extends StatelessWidget {
-  final Map<String, dynamic> booking;
+  final Map<String, dynamic> booking; // Ensure booking is a Map<String, dynamic>
   final VoidCallback onSlideToBook;
 
   const BookingCard({
