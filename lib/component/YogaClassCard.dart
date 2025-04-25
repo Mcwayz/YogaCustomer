@@ -52,14 +52,14 @@ class YogaClassCard extends StatelessWidget {
                   "Day: ${yogaClass['day'] ?? "Unknown"}",
                   style: const TextStyle(
                     fontSize: 13,
-                    color: Colors.grey,
+                    //color: Colors.grey,
                   ),
                 ),
                 Text(
                   "Time: ${yogaClass['time'] ?? "Unknown"}",
                   style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey,
+                    fontSize: 13,
+                    //color: Colors.grey,
                   ),
                 ),
               ],
