@@ -145,20 +145,27 @@ class _CartPageState extends State<CartPage> {
     }
   }
 
-  Future<void> deleteFromCart(String bookingId) async {
+    Future<void> deleteFromCart(String bookingId) async {
     try {
-      await http.delete(
+      print("Deleting booking with ID: $bookingId"); // Debug log
+      final response = await http.delete(
         Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/cart/$bookingId.json'),
       );
-
-      // Refresh the bookings list
-      fetchBookings();
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Class removed from cart successfully!")),
-      );
+  
+      if (response.statusCode == 200) {
+        print("Booking deleted successfully"); // Debug log
+        fetchBookings(); // Refresh the bookings list
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Class removed from cart successfully!")),
+        );
+      } else {
+        print("Failed to delete booking: ${response.reasonPhrase}"); // Debug log
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Failed to delete: ${response.reasonPhrase}")),
+        );
+      }
     } catch (e) {
-      print("Error deleting from cart: $e");
+      print("Error deleting from cart: $e"); // Debug log
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("An error occurred. Please try again.")),
       );
