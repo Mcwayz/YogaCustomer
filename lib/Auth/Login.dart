@@ -69,7 +69,7 @@ class _SignInScreenState extends State<SignInScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             children: [
-              const SizedBox(height: 20),
+              const SizedBox(height: 40),
               // Logo
               Image.asset(
                 "assets/logo.png", // Replace with your logo path
