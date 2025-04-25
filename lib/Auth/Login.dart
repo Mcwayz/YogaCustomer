@@ -64,7 +64,7 @@ class _SignInScreenState extends State<SignInScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
-        //backgroundColor: Colors.white,
+        backgroundColor: Colors.white,
         title: "",
         centerTitle: false,
       ),
