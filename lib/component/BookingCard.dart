@@ -67,7 +67,7 @@ class BookingCard extends StatelessWidget {
                 ElevatedButton(
                   onPressed: onSlideToBook,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFFF7643),
+                    backgroundColor: const Color.fromARGB(255, 156, 219, 162),
                     minimumSize: const Size(80, 30), // Smaller button size
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     shape: RoundedRectangleBorder(
