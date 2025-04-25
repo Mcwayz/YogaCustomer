@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
 class BookingCard extends StatelessWidget {
-  final Map<String, dynamic> booking; // Ensure booking is a Map<String, dynamic>
-  final VoidCallback onSlideToBook;
+  final Map<String, dynamic> booking; // Booking details
+  final VoidCallback onSlideToBook; // Callback for booking
+  final VoidCallback onDelete; // Callback for deleting
 
   const BookingCard({
     super.key,
     required this.booking,
     required this.onSlideToBook,
+    required this.onDelete, // Add onDelete parameter
   });
 
   @override
@@ -51,22 +53,25 @@ class BookingCard extends StatelessWidget {
               style: const TextStyle(fontSize: 13, color: Colors.grey),
             ),
             const SizedBox(height: 8),
-            Align(
-              alignment: Alignment.centerRight,
-              child: ElevatedButton(
-                onPressed: onSlideToBook,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFFF7643),
-                  minimumSize: const Size(100, 36),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(6),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                ElevatedButton(
+                  onPressed: onSlideToBook,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFFFF7643),
                   ),
+                  child: const Text("Book"),
                 ),
-                child: const Text(
-                  "Slide to Book",
-                  style: TextStyle(fontSize: 12),
+                const SizedBox(width: 8),
+                ElevatedButton(
+                  onPressed: onDelete,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                  ),
+                  child: const Text("Delete"),
                 ),
-              ),
+              ],
             ),
           ],
         ),
