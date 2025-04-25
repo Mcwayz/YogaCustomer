@@ -121,14 +121,14 @@ class _CartPageState extends State<CartPage> {
     }
   }
 
-  Future<void> deleteFromCart(String bookingId) async {
+    Future<void> deleteFromCart(String bookingId) async {
     try {
       final response = await http.delete(
         Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/cart/$bookingId.json'),
       );
-
+  
       if (response.statusCode == 200) {
-        fetchBookings();
+        fetchBookings(); // Refresh the bookings list
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Class removed from cart successfully!")),
         );
