@@ -28,7 +28,7 @@ class _CartPageState extends State<CartPage> {
     fetchBookings(); // Fetch bookings from Firebase
   }
 
-   Future<void> fetchBookings() async {
+     Future<void> fetchBookings() async {
     setState(() {
       isLoading = true; // Show loading indicator
     });
@@ -40,18 +40,35 @@ class _CartPageState extends State<CartPage> {
   
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        if (data != null) {
-          // Convert Firebase response into a list of Map<String, dynamic>
-          final List<Map<String, dynamic>> fetchedBookings = data.entries.map((entry) {
-            return {
-              'id': entry.key, // Firebase unique key
-              ...Map<String, dynamic>.from(entry.value), // Ensure proper typing
-            };
-          }).toList();
+        print("Fetched data: $data"); // Debug log
   
-          setState(() {
-            bookings = fetchedBookings;
-          });
+        if (data != null) {
+          if (data is Map) {
+            // Handle Map structure
+            final List<Map<String, dynamic>> fetchedBookings = data.entries.map((entry) {
+              return {
+                'id': entry.key,
+                ...Map<String, dynamic>.from(entry.value),
+              };
+            }).toList();
+  
+            setState(() {
+              bookings = fetchedBookings;
+            });
+          } else if (data is List) {
+            // Handle List structure
+            final List<Map<String, dynamic>> fetchedBookings = data.map((item) {
+              return Map<String, dynamic>.from(item);
+            }).toList();
+  
+            setState(() {
+              bookings = fetchedBookings;
+            });
+          } else {
+            setState(() {
+              bookings = [];
+            });
+          }
         } else {
           setState(() {
             bookings = [];
@@ -68,7 +85,6 @@ class _CartPageState extends State<CartPage> {
       });
     }
   }
-
   Future<void> addToCart(Map<String, dynamic> yogaClass) async {
     try {
       final response = await http.post(
