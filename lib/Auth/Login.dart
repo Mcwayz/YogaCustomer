@@ -1,11 +1,63 @@
 import 'package:customer_app/Pages/MainNavigation.dart'; // Import MainNavigation
 import 'package:customer_app/component/customAppBar.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart'; // Import FirebaseAuth
 import 'SignUp.dart';
 import 'ForgotPasswordScreen.dart';
 
-class SignInScreen extends StatelessWidget {
+class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
+
+  @override
+  State<SignInScreen> createState() => _SignInScreenState();
+}
+
+class _SignInScreenState extends State<SignInScreen> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  Future<void> _signIn() async {
+    final email = emailController.text.trim();
+    final password = passwordController.text.trim();
+
+    try {
+      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      // Navigate to MainNavigation after successful login
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const MainNavigation(),
+        ),
+      );
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        _showErrorDialog('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        _showErrorDialog('Wrong password provided for that user.');
+      }
+    } catch (e) {
+      _showErrorDialog('An error occurred. Please try again.');
+    }
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Login Error'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +98,7 @@ class SignInScreen extends StatelessWidget {
               const SizedBox(height: 32),
               // Email Input
               TextFormField(
+                controller: emailController,
                 decoration: const InputDecoration(
                   hintText: "Enter your email",
                   labelText: "Email",
@@ -55,13 +108,11 @@ class SignInScreen extends StatelessWidget {
                   ),
                 ),
                 textInputAction: TextInputAction.next,
-                onChanged: (value) {
-                  // Handle email input change
-                },
               ),
               const SizedBox(height: 24),
               // Password Input
               TextFormField(
+                controller: passwordController,
                 obscureText: true,
                 decoration: const InputDecoration(
                   hintText: "Enter your password",
@@ -72,22 +123,11 @@ class SignInScreen extends StatelessWidget {
                   ),
                 ),
                 textInputAction: TextInputAction.done,
-                onChanged: (value) {
-                  // Handle password input change
-                },
               ),
               const SizedBox(height: 16),
               // Continue Button
               ElevatedButton(
-                onPressed: () {
-                  // Navigate to MainNavigation after successful login
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const MainNavigation(),
-                    ),
-                  );
-                },
+                onPressed: _signIn,
                 style: ElevatedButton.styleFrom(
                   elevation: 0,
                   backgroundColor: const Color(0xFFFF7643),
