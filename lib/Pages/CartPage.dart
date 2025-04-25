@@ -3,34 +3,23 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import '../component/customAppBar.dart';
+import '../component/BookingCard.dart'; // Import the new BookingCard component
 
 class CartPage extends StatefulWidget {
-  final dynamic yogaClass;
-
-  const CartPage({super.key, this.yogaClass});
+  const CartPage({super.key});
 
   @override
   State<CartPage> createState() => _CartPageState();
 }
 
 class _CartPageState extends State<CartPage> {
-  List<dynamic> cart = [];
   List<dynamic> bookings = []; // List to store all bookings
-  final TextEditingController emailController = TextEditingController();
   bool isLoading = true; // Loading state
 
   @override
   void initState() {
     super.initState();
-    if (widget.yogaClass != null) {
-      cart.add(widget.yogaClass);
-    }
     fetchBookings(); // Fetch all bookings from Firebase
-  }
-
-  bool isValidEmail(String email) {
-    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
-    return emailRegex.hasMatch(email);
   }
 
   Future<void> fetchBookings() async {
@@ -74,61 +63,34 @@ class _CartPageState extends State<CartPage> {
     }
   }
 
-  Future<void> submitCart() async {
-    final email = emailController.text;
-
-    // Validate email
-    if (email.isEmpty || !isValidEmail(email)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please enter a valid email address")),
-      );
-      return;
-    }
-
-    // Check if cart is empty
-    if (cart.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Your cart is empty")),
-      );
-      return;
-    }
-
+  Future<void> moveToBooked(String bookingId, Map<String, dynamic> booking) async {
     try {
-      // Send data to Firebase
-      for (var yogaClass in cart) {
-        final response = await http.post(
-          Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/bookings.json'),
-          headers: {'Content-Type': 'application/json'},
-          body: json.encode({
-            'classId': yogaClass['id'],
-            'type': yogaClass['type'],
-            'day': yogaClass['day'],
-            'time': yogaClass['time'],
-            'price': yogaClass['price'],
-          }),
+      // Send the booking to the "Booked" node
+      final response = await http.post(
+        Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/Booked.json'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(booking),
+      );
+
+      if (response.statusCode == 200) {
+        // Remove the booking from the "bookings" node
+        await http.delete(
+          Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/bookings/$bookingId.json'),
         );
 
-        if (response.statusCode != 200) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Failed to submit booking: ${response.reasonPhrase}")),
-          );
-          return;
-        }
+        // Refresh the bookings list
+        fetchBookings();
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Booking moved to Booked successfully!")),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Failed to move booking: ${response.reasonPhrase}")),
+        );
       }
-
-      // Show success message
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Booking submitted successfully")),
-      );
-      setState(() {
-        cart.clear();
-        emailController.clear(); // Clear email field
-      });
-
-      // Refresh bookings after submission
-      fetchBookings();
     } catch (e) {
-      print("Error submitting cart: $e");
+      print("Error moving booking: $e");
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("An error occurred. Please try again.")),
       );
@@ -139,44 +101,23 @@ class _CartPageState extends State<CartPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: "Shopping Cart",
+        title: "Bookings",
         centerTitle: false,
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator()) // Show loading indicator
-          : Column(
-              children: [
-                Expanded(
-                  child: bookings.isEmpty
-                      ? const Center(child: Text("No bookings found")) // Empty bookings message
-                      : ListView.builder(
-                          itemCount: bookings.length,
-                          itemBuilder: (context, index) {
-                            final booking = bookings[index];
-                            return ListTile(
-                              title: Text(booking['type']),
-                              subtitle: Text("${booking['day']} at ${booking['time']}"),
-                              trailing: Text("£${booking['price']}"),
-                            );
-                          },
-                        ),
+          : bookings.isEmpty
+              ? const Center(child: Text("No bookings found")) // Empty bookings message
+              : ListView.builder(
+                  itemCount: bookings.length,
+                  itemBuilder: (context, index) {
+                    final booking = bookings[index];
+                    return BookingCard(
+                      booking: booking,
+                      onSlideToBook: () => moveToBooked(booking['id'], booking),
+                    );
+                  },
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: emailController,
-                    decoration: const InputDecoration(
-                      labelText: "Enter your email",
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: submitCart,
-                  child: const Text("Submit Booking"),
-                ),
-              ],
-            ),
     );
   }
 }
