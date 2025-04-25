@@ -121,29 +121,29 @@ class _CartPageState extends State<CartPage> {
     }
   }
 
-    Future<void> deleteFromCart(String bookingId) async {
-    try {
-      final response = await http.delete(
-        Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/cart/$bookingId.json'),
-      );
-  
-      if (response.statusCode == 200) {
-        fetchBookings(); // Refresh the bookings list
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Class removed from cart successfully!")),
+        Future<void> deleteFromCart(String bookingId) async {
+      try {
+        final response = await http.delete(
+          Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/cart/$bookingId.json'),
         );
-      } else {
+    
+        if (response.statusCode == 200) {
+          fetchBookings(); // Refresh the bookings list
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Class removed from cart successfully!")),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Failed to delete: ${response.reasonPhrase}")),
+          );
+        }
+      } catch (e) {
+        print("Error deleting from cart: $e");
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Failed to delete: ${response.reasonPhrase}")),
+          const SnackBar(content: Text("An error occurred. Please try again.")),
         );
       }
-    } catch (e) {
-      print("Error deleting from cart: $e");
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("An error occurred. Please try again.")),
-      );
     }
-  }
 
   @override
   Widget build(BuildContext context) {
