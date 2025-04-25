@@ -38,7 +38,7 @@ Future<void> _logout(BuildContext context) async {
         style: TextStyle(
           color: titleColor,
           fontSize: 20,
-          fontWeight: FontWeight.bold,
+         // fontWeight: FontWeight.bold,
         ),
       ),
       elevation: 0,
