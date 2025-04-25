@@ -13,13 +13,13 @@ class YogaClassCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12), // Reduced margin
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(8), // Slightly smaller border radius
       ),
-      elevation: 4,
+      elevation: 2, // Reduced elevation for a flatter look
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(12.0), // Reduced padding
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -27,37 +27,69 @@ class YogaClassCard extends StatelessWidget {
             Text(
               yogaClass['type'] ?? "Unknown Type",
               style: const TextStyle(
-                fontSize: 18,
+                fontSize: 16, // Slightly smaller font size
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 6), // Reduced spacing
             // Class Details
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Day: ${yogaClass['day']}",
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey,
+                  ),
+                ),
+                Text(
+                  "Time: ${yogaClass['time']}",
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 4), // Reduced spacing
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Teacher: ${yogaClass['teacher']}",
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey,
+                  ),
+                ),
+                Text(
+                  "Capacity: ${yogaClass['capacity']}",
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 4), // Reduced spacing
             Text(
-              "Day: ${yogaClass['day']} | Time: ${yogaClass['time']}",
+              "Comments: ${yogaClass['class_instances'][1]?['comments'] ?? "None"}",
               style: const TextStyle(
-                fontSize: 14,
+                fontSize: 12,
                 color: Colors.grey,
               ),
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 4), // Reduced spacing
             Text(
-              "Teacher: ${yogaClass['teacher']}",
+              "Date: ${yogaClass['class_instances'][1]?['date'] ?? "Unknown Date"}",
               style: const TextStyle(
-                fontSize: 14,
+                fontSize: 12,
                 color: Colors.grey,
               ),
             ),
-            const SizedBox(height: 4),
-            Text(
-              "Price: £${yogaClass['price']}",
-              style: const TextStyle(
-                fontSize: 14,
-                color: Colors.grey,
-              ),
-            ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 8), // Reduced spacing
             // Add to Cart Button
             Align(
               alignment: Alignment.centerRight,
@@ -65,11 +97,15 @@ class YogaClassCard extends StatelessWidget {
                 onPressed: onAddToCart,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFFF7643),
+                  minimumSize: const Size(100, 36), // Compact button size
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(6),
                   ),
                 ),
-                child: const Text("Add to Cart"),
+                child: const Text(
+                  "Add to Cart",
+                  style: TextStyle(fontSize: 12), // Smaller font size for the button
+                ),
               ),
             ),
           ],
