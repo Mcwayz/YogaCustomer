@@ -78,8 +78,8 @@ class YogaClassCard extends StatelessWidget {
                 Text(
                   "Price: £${yogaClass['price'] ?? "Unknown"}",
                   style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey,
+                    fontSize: 13,
+                    //color: Colors.grey,
                   ),
                 ),
               ],
