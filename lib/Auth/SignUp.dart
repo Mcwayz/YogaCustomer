@@ -1,9 +1,65 @@
 import 'package:flutter/material.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import '../component/customAppBar.dart';
 
-class SignUpScreen extends StatelessWidget {
+class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
+
+  @override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
+
+  Future<void> _signUp() async {
+    final email = emailController.text.trim();
+    final password = passwordController.text.trim();
+    final confirmPassword = confirmPasswordController.text.trim();
+
+    if (password != confirmPassword) {
+      _showErrorDialog("Passwords do not match.");
+      return;
+    }
+
+    try {
+      final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      // Navigate to the next screen or show success message
+      print("User registered: ${credential.user?.email}");
+      Navigator.pop(context); // Navigate back to Sign In screen
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        _showErrorDialog("The password provided is too weak.");
+      } else if (e.code == 'email-already-in-use') {
+        _showErrorDialog("The account already exists for that email.");
+      } else {
+        _showErrorDialog("An error occurred. Please try again.");
+      }
+    } catch (e) {
+      _showErrorDialog("An error occurred. Please try again.");
+    }
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Sign-Up Error'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +77,10 @@ class SignUpScreen extends StatelessWidget {
             children: [
               const SizedBox(height: 16),
               // Logo
-          Image.asset(
-          "assets/logo.png", // Replace with your logo path
-          height: 150,
-        ),
+              Image.asset(
+                "assets/logo.png", // Replace with your logo path
+                height: 150,
+              ),
               const SizedBox(height: 16),
               // Title
               const Text(
@@ -47,6 +103,7 @@ class SignUpScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     TextFormField(
+                      controller: emailController,
                       decoration: const InputDecoration(
                         hintText: "Enter your email",
                         labelText: "Email",
@@ -56,12 +113,10 @@ class SignUpScreen extends StatelessWidget {
                         ),
                       ),
                       textInputAction: TextInputAction.next,
-                      onChanged: (value) {
-                        // Handle email input change
-                      },
                     ),
                     const SizedBox(height: 24),
                     TextFormField(
+                      controller: passwordController,
                       obscureText: true,
                       decoration: const InputDecoration(
                         hintText: "Enter your password",
@@ -72,12 +127,10 @@ class SignUpScreen extends StatelessWidget {
                         ),
                       ),
                       textInputAction: TextInputAction.next,
-                      onChanged: (value) {
-                        // Handle password input change
-                      },
                     ),
                     const SizedBox(height: 24),
                     TextFormField(
+                      controller: confirmPasswordController,
                       obscureText: true,
                       decoration: const InputDecoration(
                         hintText: "Re-enter your password",
@@ -88,15 +141,10 @@ class SignUpScreen extends StatelessWidget {
                         ),
                       ),
                       textInputAction: TextInputAction.done,
-                      onChanged: (value) {
-                        // Handle password input change
-                      },
                     ),
                     const SizedBox(height: 32),
                     ElevatedButton(
-                      onPressed: () {
-                        // Handle form submission
-                      },
+                      onPressed: _signUp,
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
                         backgroundColor: const Color(0xFFFF7643),
@@ -110,7 +158,8 @@ class SignUpScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-              ), const SizedBox(height: 16),
+              ),
+              const SizedBox(height: 16),
               // Already have an account? Sign In
               GestureDetector(
                 onTap: () {
@@ -167,7 +216,6 @@ class SignUpScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              
             ],
           ),
         ),
