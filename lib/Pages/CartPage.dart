@@ -6,8 +6,9 @@ import '../component/customAppBar.dart';
 import '../component/BookingCard.dart'; // Import the BookingCard component
 
 class CartPage extends StatefulWidget {
-  
-  const CartPage({super.key});
+  final Map<String, dynamic>? yogaClass; // Accept yogaClass as an optional parameter
+
+  const CartPage({super.key, this.yogaClass}); // Add yogaClass to the constructor
 
   @override
   State<CartPage> createState() => _CartPageState();
@@ -20,6 +21,10 @@ class _CartPageState extends State<CartPage> {
   @override
   void initState() {
     super.initState();
+    if (widget.yogaClass != null) {
+      // Add the passed yogaClass to the bookings list
+      addToCart(widget.yogaClass!);
+    }
     fetchBookings(); // Fetch bookings from Firebase
   }
 
@@ -30,7 +35,7 @@ class _CartPageState extends State<CartPage> {
 
     try {
       final response = await http.get(
-        Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/bookings.json'),
+        Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/cart.json'),
       );
 
       if (response.statusCode == 200) {
@@ -64,6 +69,32 @@ class _CartPageState extends State<CartPage> {
     }
   }
 
+  Future<void> addToCart(Map<String, dynamic> yogaClass) async {
+    try {
+      final response = await http.post(
+        Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/cart.json'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(yogaClass),
+      );
+
+      if (response.statusCode == 200) {
+        fetchBookings(); // Refresh the bookings list
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Class added to cart successfully!")),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Failed to add to cart: ${response.reasonPhrase}")),
+        );
+      }
+    } catch (e) {
+      print("Error adding to cart: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("An error occurred. Please try again.")),
+      );
+    }
+  }
+
   Future<void> moveToBooked(String bookingId, Map<String, dynamic> booking) async {
     try {
       // Send the booking to the "Booked" node
@@ -74,9 +105,9 @@ class _CartPageState extends State<CartPage> {
       );
 
       if (response.statusCode == 200) {
-        // Remove the booking from the "bookings" node
+        // Remove the booking from the "cart" node
         await http.delete(
-          Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/bookings/$bookingId.json'),
+          Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/cart/$bookingId.json'),
         );
 
         // Refresh the bookings list
@@ -98,17 +129,37 @@ class _CartPageState extends State<CartPage> {
     }
   }
 
+  Future<void> deleteFromCart(String bookingId) async {
+    try {
+      await http.delete(
+        Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/cart/$bookingId.json'),
+      );
+
+      // Refresh the bookings list
+      fetchBookings();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Class removed from cart successfully!")),
+      );
+    } catch (e) {
+      print("Error deleting from cart: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("An error occurred. Please try again.")),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: "Bookings",
+        title: "Cart",
         centerTitle: false,
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator()) // Show loading indicator
           : bookings.isEmpty
-              ? const Center(child: Text("No bookings found")) // Empty bookings message
+              ? const Center(child: Text("Your cart is empty")) // Empty cart message
               : ListView.builder(
                   itemCount: bookings.length,
                   itemBuilder: (context, index) {
@@ -116,6 +167,7 @@ class _CartPageState extends State<CartPage> {
                     return BookingCard(
                       booking: booking,
                       onSlideToBook: () => moveToBooked(booking['id'], booking),
+                      onDelete: () => deleteFromCart(booking['id']),
                     );
                   },
                 ),
