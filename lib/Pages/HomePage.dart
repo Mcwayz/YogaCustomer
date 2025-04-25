@@ -16,7 +16,7 @@ class _HomePageState extends State<HomePage> {
   List<dynamic> yogaClasses = [];
   List<dynamic> filteredClasses = [];
   String searchQuery = "";
-  int _selectedIndex = 0;
+  bool isLoading = true; // Added for loading indicator
 
   @override
   void initState() {
@@ -25,15 +25,27 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> fetchYogaClasses() async {
-    final response = await http.get(Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/courses'));
-    if (response.statusCode == 200) {
+    setState(() {
+      isLoading = true; // Show loading indicator
+    });
+    try {
+      final response = await http.get(Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/courses'));
+      if (response.statusCode == 200) {
+        setState(() {
+          yogaClasses = json.decode(response.body);
+          filteredClasses = yogaClasses;
+        });
+      } else {
+        throw Exception("Failed to fetch classes");
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error fetching classes: $e")),
+      );
+    } finally {
       setState(() {
-        yogaClasses = json.decode(response.body);
-        filteredClasses = yogaClasses;
+        isLoading = false; // Hide loading indicator
       });
-    } else {
-      // Handle error
-      print("Failed to fetch classes");
     }
   }
 
@@ -55,63 +67,50 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-
-    if (index == 0) {
-      // Stay on HomePage
-    } else if (index == 1) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const CartPage()),
-      );
-    } else if (index == 2) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const BookedClassesPage()),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
         title: "Yoga Classes",
-        centerTitle: false
+        centerTitle: false,
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              decoration: const InputDecoration(
-                labelText: "Search by day or time",
-                border: OutlineInputBorder(),
-              ),
-              onChanged: filterClasses,
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: filteredClasses.length,
-              itemBuilder: (context, index) {
-                final yogaClass = filteredClasses[index];
-                return ListTile(
-                  title: Text(yogaClass['name']),
-                  subtitle: Text("${yogaClass['day']} at ${yogaClass['time']}"),
-                  trailing: ElevatedButton(
-                    onPressed: () => addToCart(yogaClass),
-                    child: const Text("Add to Cart"),
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator()) // Show loading indicator
+          : Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    decoration: const InputDecoration(
+                      labelText: "Search by day or time",
+                      border: OutlineInputBorder(),
+                    ),
+                    onChanged: filterClasses,
                   ),
-                );
-              },
+                ),
+                Expanded(
+                  child: filteredClasses.isEmpty
+                      ? const Center(child: Text("No classes found")) // Empty state message
+                      : ListView.builder(
+                          itemCount: filteredClasses.length,
+                          itemBuilder: (context, index) {
+                            final yogaClass = filteredClasses[index];
+                            return Card(
+                              margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                              child: ListTile(
+                                title: Text(yogaClass['name']),
+                                subtitle: Text("${yogaClass['day']} at ${yogaClass['time']}"),
+                                trailing: ElevatedButton(
+                                  onPressed: () => addToCart(yogaClass),
+                                  child: const Text("Add to Cart"),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
     );
   }
 }
