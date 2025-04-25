@@ -73,16 +73,24 @@ class _BookedClassesPageState extends State<BookedClassesPage> {
           ? const Center(child: CircularProgressIndicator()) // Show loading indicator
           : bookedClasses.isEmpty
               ? const Center(child: Text("No booked classes found")) // Empty state message
-              : ListView.builder(
-                  itemCount: bookedClasses.length,
-                  itemBuilder: (context, index) {
-                    final yogaClass = bookedClasses[index];
-                    return ListTile(
-                      title: Text(yogaClass['type'] ?? "Unknown Type"),
-                      subtitle: Text("${yogaClass['day']} at ${yogaClass['time']}"),
-                      trailing: Text("£${yogaClass['price']}"),
-                    );
-                  },
+              : SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      ListView.builder(
+                        shrinkWrap: true, // Ensures the ListView takes only the necessary space
+                        physics: const NeverScrollableScrollPhysics(), // Prevents nested scrolling
+                        itemCount: bookedClasses.length,
+                        itemBuilder: (context, index) {
+                          final yogaClass = bookedClasses[index];
+                          return ListTile(
+                            title: Text(yogaClass['type'] ?? "Unknown Type"),
+                            subtitle: Text("${yogaClass['day']} at ${yogaClass['time']}"),
+                            trailing: Text("£${yogaClass['price']}"),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
     );
   }
