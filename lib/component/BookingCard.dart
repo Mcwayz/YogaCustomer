@@ -19,19 +19,20 @@ class BookingCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10), // Slightly rounded corners
       ),
-      elevation: 1, // Subtle shadow for a clean look
+      elevation: 2, // Subtle shadow for a clean look
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12), // Compact padding
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16), // Compact padding
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Display booking type and price
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   booking['type'] ?? "Unknown Type",
                   style: const TextStyle(
-                    fontSize: 14, // Smaller font size
+                    fontSize: 16, // Slightly larger font size
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
@@ -39,60 +40,62 @@ class BookingCard extends StatelessWidget {
                 Text(
                   "£${booking['price'] ?? "Unknown"}",
                   style: const TextStyle(
-                    fontSize: 14, // Smaller font size
+                    fontSize: 16, // Slightly larger font size
                     fontWeight: FontWeight.bold,
                     color: Colors.green,
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 6),
+            // Display booking day and time
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   "Day: ${booking['day'] ?? "Unknown"}",
-                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  style: const TextStyle(fontSize: 14, color: Colors.grey),
                 ),
                 Text(
                   "Time: ${booking['time'] ?? "Unknown"}",
-                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  style: const TextStyle(fontSize: 14, color: Colors.grey),
                 ),
               ],
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 10),
+            // Action buttons for booking and deleting
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 ElevatedButton(
                   onPressed: onSlideToBook,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 156, 219, 162),
-                    minimumSize: const Size(80, 30), // Smaller button size
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    backgroundColor: const Color(0xFF4CAF50), // Green color for "Book"
+                    minimumSize: const Size(90, 36), // Adjusted button size
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6),
+                      borderRadius: BorderRadius.circular(8),
                     ),
                   ),
                   child: const Text(
                     "Book",
-                    style: TextStyle(fontSize: 12), // Smaller font size
+                    style: TextStyle(fontSize: 14), // Adjusted font size
                   ),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 12),
                 ElevatedButton(
                   onPressed: onDelete,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                    minimumSize: const Size(80, 30), // Smaller button size
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    backgroundColor: Colors.red, // Red color for "Delete"
+                    minimumSize: const Size(90, 36), // Adjusted button size
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6),
+                      borderRadius: BorderRadius.circular(8),
                     ),
                   ),
                   child: const Text(
                     "Delete",
-                    style: TextStyle(fontSize: 12), // Smaller font size
+                    style: TextStyle(fontSize: 14), // Adjusted font size
                   ),
                 ),
               ],
