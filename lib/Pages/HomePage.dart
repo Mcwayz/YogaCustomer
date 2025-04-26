@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../component/customAppBar.dart';
 import '../component/YogaClassCard.dart'; // Import the new component
-import 'MainNavigation.dart'; // Import MainNavigation
+import 'CartPage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -65,11 +65,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   void addToCart(dynamic yogaClass) {
-    Navigator.pushReplacement(
+    Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => MainNavigation(initialIndex: 1), // Navigate to Cart tab
-      ),
+      MaterialPageRoute(builder: (context) => CartPage(yogaClass: yogaClass)),
     );
   }
 
