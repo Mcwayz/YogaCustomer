@@ -1,5 +1,4 @@
 import 'package:customer_app/Pages/MainNavigation.dart'; // Import MainNavigation
-import 'package:customer_app/component/customAppBar.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart'; // Import FirebaseAuth
 import 'SignUp.dart';
