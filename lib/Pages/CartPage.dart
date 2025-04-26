@@ -121,9 +121,8 @@ class _CartPageState extends State<CartPage> {
     }
   }
 
-               Future<void> deleteFromCart(String bookingId) async {
+                 Future<void> deleteFromCart(String bookingId) async {
           try {
-            // Use the DELETE method to remove the specific booking from Firebase
             final response = await http.delete(
               Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/cart/$bookingId.json'),
             );
