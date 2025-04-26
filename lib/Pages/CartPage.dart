@@ -27,20 +27,20 @@ class _CartPageState extends State<CartPage> {
     fetchBookings();
   }
 
-    Future<void> fetchBookings() async {
+  Future<void> fetchBookings() async {
     setState(() {
       isLoading = true;
     });
-  
+
     try {
       final response = await http.get(
         Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/cart.json'),
       );
       print("Fetched bookings response: ${response.body}");
-  
+
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-  
+
         if (data != null && data is Map) {
           final List<Map<String, dynamic>> fetchedBookings = data.entries.map((entry) {
             return {
@@ -48,7 +48,7 @@ class _CartPageState extends State<CartPage> {
               ...Map<String, dynamic>.from(entry.value),
             };
           }).toList();
-  
+
           setState(() {
             bookings = fetchedBookings;
           });
@@ -121,34 +121,35 @@ class _CartPageState extends State<CartPage> {
       );
     }
   }
-Future<void> deleteFromCart(String bookingId) async {
-  print("Attempting to delete booking with ID: $bookingId");
-  try {
-    final response = await http.delete(
-      Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/cart/$bookingId.json'),
-    );
-    print("Response status: ${response.statusCode}");
-    print("Response body: ${response.body}");
 
-    if (response.statusCode == 200) {
-      print("Deletion successful. Refreshing bookings...");
-      fetchBookings();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Deleted successfully!")),
+  Future<void> deleteFromCart(String bookingId) async {
+    print("Attempting to delete booking with ID: $bookingId");
+    try {
+      final response = await http.delete(
+        Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/cart/$bookingId.json'),
       );
-    } else {
-      print("Failed to delete. Reason: ${response.reasonPhrase}");
+      print("Response status: ${response.statusCode}");
+      print("Response body: ${response.body}");
+
+      if (response.statusCode == 200) {
+        print("Deletion successful. Refreshing bookings...");
+        fetchBookings(); // Refresh the bookings list
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Deleted successfully!")),
+        );
+      } else {
+        print("Failed to delete. Reason: ${response.reasonPhrase}");
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Failed to delete: ${response.reasonPhrase}")),
+        );
+      }
+    } catch (e) {
+      print("Error deleting from cart: $e");
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Failed to delete: ${response.reasonPhrase}")),
+        const SnackBar(content: Text("An error occurred. Please try again.")),
       );
     }
-  } catch (e) {
-    print("Error deleting from cart: $e");
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("An error occurred. Please try again.")),
-    );
   }
-}
 
   @override
   Widget build(BuildContext context) {
