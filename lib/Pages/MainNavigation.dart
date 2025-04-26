@@ -4,14 +4,22 @@ import 'CartPage.dart';
 import 'BookedClassesPage.dart';
 
 class MainNavigation extends StatefulWidget {
-  const MainNavigation({super.key});
+  final int initialIndex; // Add an initial index parameter
+
+  const MainNavigation({super.key, this.initialIndex = 0}); // Default to HomePage
 
   @override
   State<MainNavigation> createState() => _MainNavigationState();
 }
 
 class _MainNavigationState extends State<MainNavigation> {
-  int _selectedIndex = 0;
+  late int _selectedIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.initialIndex; // Set the initial index
+  }
 
   // List of pages for navigation
   final List<Widget> _pages = [
