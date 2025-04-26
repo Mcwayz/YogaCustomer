@@ -7,7 +7,7 @@ class BookedClassCard extends StatelessWidget {
   const BookedClassCard({
     super.key,
     required this.yogaClass,
-    this.onDelete, // <-- Accept it
+    this.onDelete, 
   });
 
   @override
