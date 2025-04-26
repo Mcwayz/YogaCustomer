@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -27,17 +26,7 @@ class _CartPageState extends State<CartPage> {
     }
     fetchBookings();
   }
-    // Reauthenticate the user
-  Future<void> reauthenticateUser(String email, String password) async {
-    try {
-      final credential = EmailAuthProvider.credential(email: email, password: password);
-      await FirebaseAuth.instance.currentUser?.reauthenticateWithCredential(credential);
-      print("Reauthentication successful");
-    } catch (e) {
-      print("Error reauthenticating user: $e");
-    }
-  }
-  // Fetch bookings from Firebase
+
   Future<void> fetchBookings() async {
     setState(() {
       isLoading = true;
@@ -56,9 +45,8 @@ class _CartPageState extends State<CartPage> {
           final List<Map<String, dynamic>> fetchedBookings = data.entries.map((entry) {
             final bookingData = Map<String, dynamic>.from(entry.value);
             return {
-              'id': entry.key.toString(), // Force id as String
+              'firebaseKey': entry.key, // Save the Firebase random key
               ...bookingData,
-              'classId': bookingData['id'], // Keep original id if needed
             };
           }).toList();
 
@@ -80,16 +68,12 @@ class _CartPageState extends State<CartPage> {
     }
   }
 
-  // Add a class to the cart
   Future<void> addToCart(Map<String, dynamic> yogaClass) async {
     try {
-      final yogaClassCopy = Map<String, dynamic>.from(yogaClass);
-      yogaClassCopy.remove('id'); // Remove id before posting
-
       final response = await http.post(
         Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/cart.json'),
         headers: {'Content-Type': 'application/json'},
-        body: json.encode(yogaClassCopy),
+        body: json.encode(yogaClass),
       );
 
       if (response.statusCode == 200) {
@@ -110,8 +94,7 @@ class _CartPageState extends State<CartPage> {
     }
   }
 
-  // Move booking to "Booked" and remove from cart
-  Future<void> moveToBooked(String bookingId, Map<String, dynamic> booking) async {
+  Future<void> moveToBooked(String firebaseKey, Map<String, dynamic> booking) async {
     try {
       final response = await http.post(
         Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/Booked.json'),
@@ -120,9 +103,7 @@ class _CartPageState extends State<CartPage> {
       );
 
       if (response.statusCode == 200) {
-        await http.delete(
-          Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/cart/$bookingId.json'),
-        );
+        await deleteFromCart(firebaseKey);
         fetchBookings();
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Booked successfully!")),
@@ -141,31 +122,32 @@ class _CartPageState extends State<CartPage> {
   }
 
   Future<void> deleteFromCart(String firebaseKey) async {
-  print("Deleting booking with key: $firebaseKey");
+    print("Deleting booking with key: $firebaseKey");
 
-  try {
-    final response = await http.delete(
-      Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/cart/$firebaseKey.json'),
-    );
-
-    if (response.statusCode == 200) {
-      fetchBookings();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Deleted successfully!")),
+    try {
+      final response = await http.delete(
+        Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/cart/$firebaseKey.json'),
       );
-    } else {
+      print("Response status: ${response.statusCode}");
+      print("Response body: ${response.body}");
+
+      if (response.statusCode == 200) {
+        fetchBookings();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Deleted successfully!")),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Failed to delete: ${response.reasonPhrase}")),
+        );
+      }
+    } catch (e) {
+      print("Error deleting from cart: $e");
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Failed to delete: ${response.reasonPhrase}")),
+        const SnackBar(content: Text("An error occurred. Please try again.")),
       );
     }
-  } catch (e) {
-    print("Error deleting booking: $e");
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("An error occurred while deleting.")),
-    );
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -182,12 +164,10 @@ class _CartPageState extends State<CartPage> {
                   itemCount: bookings.length,
                   itemBuilder: (context, index) {
                     final booking = bookings[index];
-                    print("Booking ID: ${booking['id']}, Type: ${booking['id'].runtimeType}");
-
                     return BookingCard(
                       booking: booking,
-                      onSlideToBook: () => moveToBooked(booking['id'], booking),
-                      onDelete: () => deleteFromCart(booking['id']),
+                      onSlideToBook: () => moveToBooked(booking['firebaseKey'], booking),
+                      onDelete: () => deleteFromCart(booking['firebaseKey']),
                     );
                   },
                 ),
