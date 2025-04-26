@@ -27,6 +27,7 @@ class _CartPageState extends State<CartPage> {
     fetchBookings();
   }
 
+  // Fetch bookings from Firebase
   Future<void> fetchBookings() async {
     setState(() {
       isLoading = true;
@@ -45,9 +46,9 @@ class _CartPageState extends State<CartPage> {
           final List<Map<String, dynamic>> fetchedBookings = data.entries.map((entry) {
             final bookingData = Map<String, dynamic>.from(entry.value);
             return {
-              'id': entry.key, // Use the Firebase key as the 'id'
+              'id': entry.key.toString(), // Force id as String
               ...bookingData,
-              'classId': bookingData['id'], // Store the original 'id' as 'classId'
+              'classId': bookingData['id'], // Keep original id if needed
             };
           }).toList();
 
@@ -69,12 +70,16 @@ class _CartPageState extends State<CartPage> {
     }
   }
 
+  // Add a class to the cart
   Future<void> addToCart(Map<String, dynamic> yogaClass) async {
     try {
+      final yogaClassCopy = Map<String, dynamic>.from(yogaClass);
+      yogaClassCopy.remove('id'); // Remove id before posting
+
       final response = await http.post(
         Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/cart.json'),
         headers: {'Content-Type': 'application/json'},
-        body: json.encode(yogaClass),
+        body: json.encode(yogaClassCopy),
       );
 
       if (response.statusCode == 200) {
@@ -95,6 +100,7 @@ class _CartPageState extends State<CartPage> {
     }
   }
 
+  // Move booking to "Booked" and remove from cart
   Future<void> moveToBooked(String bookingId, Map<String, dynamic> booking) async {
     try {
       final response = await http.post(
@@ -124,6 +130,7 @@ class _CartPageState extends State<CartPage> {
     }
   }
 
+  // Delete booking from cart
   Future<void> deleteFromCart(String bookingId) async {
     print("Attempting to delete booking with ID: $bookingId");
     try {
@@ -135,7 +142,7 @@ class _CartPageState extends State<CartPage> {
 
       if (response.statusCode == 200) {
         print("Deletion successful. Refreshing bookings...");
-        fetchBookings(); // Refresh the bookings list
+        fetchBookings(); // Refresh list after deleting
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Deleted successfully!")),
         );
@@ -169,10 +176,11 @@ class _CartPageState extends State<CartPage> {
                   itemBuilder: (context, index) {
                     final booking = bookings[index];
                     print("Booking ID: ${booking['id']}, Type: ${booking['id'].runtimeType}");
+
                     return BookingCard(
                       booking: booking,
                       onSlideToBook: () => moveToBooked(booking['id'], booking),
-                      onDelete: () => deleteFromCart(booking['id']), // Pass the correct Firebase key
+                      onDelete: () => deleteFromCart(booking['id']),
                     );
                   },
                 ),
