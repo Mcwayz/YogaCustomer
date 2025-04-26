@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class BookedClassCard extends StatelessWidget {
-  final Map<String, dynamic> yogaClass; // Data for the booked class
+  final Map<String, dynamic> yogaClass; 
   final VoidCallback? onDelete; 
 
   const BookedClassCard({
