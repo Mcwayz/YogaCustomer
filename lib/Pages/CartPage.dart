@@ -27,20 +27,20 @@ class _CartPageState extends State<CartPage> {
     fetchBookings();
   }
 
-  Future<void> fetchBookings() async {
+    Future<void> fetchBookings() async {
     setState(() {
       isLoading = true;
     });
-
+  
     try {
       final response = await http.get(
         Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/cart.json'),
       );
       print("Fetched bookings response: ${response.body}");
-
+  
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-
+  
         if (data != null && data is Map) {
           final List<Map<String, dynamic>> fetchedBookings = data.entries.map((entry) {
             return {
@@ -48,7 +48,7 @@ class _CartPageState extends State<CartPage> {
               ...Map<String, dynamic>.from(entry.value),
             };
           }).toList();
-
+  
           setState(() {
             bookings = fetchedBookings;
           });
