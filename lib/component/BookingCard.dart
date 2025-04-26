@@ -15,23 +15,24 @@ class BookingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8), // Reduced margin
+      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10), // Slightly rounded corners
+        borderRadius: BorderRadius.circular(10),
       ),
-      elevation: 1, // Subtle shadow for a clean look
+      elevation: 1,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12), // Compact padding
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Top Row: Type and Price
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   booking['type'] ?? "Unknown Type",
                   style: const TextStyle(
-                    fontSize: 14, // Smaller font size
+                    fontSize: 14,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
@@ -39,7 +40,7 @@ class BookingCard extends StatelessWidget {
                 Text(
                   "£${booking['price'] ?? "Unknown"}",
                   style: const TextStyle(
-                    fontSize: 14, // Smaller font size
+                    fontSize: 14,
                     fontWeight: FontWeight.bold,
                     color: Colors.green,
                   ),
@@ -47,6 +48,7 @@ class BookingCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 4),
+            // Middle Row: Day and Time
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -61,6 +63,7 @@ class BookingCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 8),
+            // Bottom Row: Buttons
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -68,7 +71,7 @@ class BookingCard extends StatelessWidget {
                   onPressed: onSlideToBook,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromARGB(255, 156, 219, 162),
-                    minimumSize: const Size(80, 30), // Smaller button size
+                    minimumSize: const Size(80, 30),
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(6),
@@ -76,15 +79,44 @@ class BookingCard extends StatelessWidget {
                   ),
                   child: const Text(
                     "Book",
-                    style: TextStyle(fontSize: 12), // Smaller font size
+                    style: TextStyle(fontSize: 12),
                   ),
                 ),
                 const SizedBox(width: 8),
                 ElevatedButton(
-                  onPressed: onDelete, // Directly trigger the delete callback
+                  onPressed: () async {
+                    if (booking['id'] == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Error: Cannot delete, booking ID is missing")),
+                      );
+                      return;
+                    }
+
+                    final confirm = await showDialog<bool>(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text("Confirm Delete"),
+                        content: const Text("Are you sure you want to delete this booking?"),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, false),
+                            child: const Text("Cancel"),
+                          ),
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, true),
+                            child: const Text("Delete"),
+                          ),
+                        ],
+                      ),
+                    );
+
+                    if (confirm == true) {
+                      onDelete();
+                    }
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
-                    minimumSize: const Size(80, 30), // Smaller button size
+                    minimumSize: const Size(80, 30),
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(6),
@@ -92,7 +124,7 @@ class BookingCard extends StatelessWidget {
                   ),
                   child: const Text(
                     "Delete",
-                    style: TextStyle(fontSize: 12), // Smaller font size
+                    style: TextStyle(fontSize: 12),
                   ),
                 ),
               ],
