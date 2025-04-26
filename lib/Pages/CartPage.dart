@@ -121,35 +121,34 @@ class _CartPageState extends State<CartPage> {
       );
     }
   }
+Future<void> deleteFromCart(String bookingId) async {
+  print("Attempting to delete booking with ID: $bookingId");
+  try {
+    final response = await http.delete(
+      Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/cart/$bookingId.json'),
+    );
+    print("Response status: ${response.statusCode}");
+    print("Response body: ${response.body}");
 
-                 Future<void> deleteFromCart(String bookingId) async {
-              print("Attempting to delete booking with ID: $bookingId");
-              try {
-                final response = await http.delete(
-                  Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/cart/$bookingId.json'),
-                );
-                print("Response status: ${response.statusCode}");
-                print("Response body: ${response.body}");
-            
-                if (response.statusCode == 200) {
-                  print("Deletion successful. Refreshing bookings...");
-                  fetchBookings();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Deleted successfully!")),
-                  );
-                } else {
-                  print("Failed to delete. Reason: ${response.reasonPhrase}");
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("Failed to delete: ${response.reasonPhrase}")),
-                  );
-                }
-              } catch (e) {
-                print("Error deleting from cart: $e");
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("An error occurred. Please try again.")),
-                );
-              }
-            }
+    if (response.statusCode == 200) {
+      print("Deletion successful. Refreshing bookings...");
+      fetchBookings();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Deleted successfully!")),
+      );
+    } else {
+      print("Failed to delete. Reason: ${response.reasonPhrase}");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Failed to delete: ${response.reasonPhrase}")),
+      );
+    }
+  } catch (e) {
+    print("Error deleting from cart: $e");
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("An error occurred. Please try again.")),
+    );
+  }
+}
 
   @override
   Widget build(BuildContext context) {
