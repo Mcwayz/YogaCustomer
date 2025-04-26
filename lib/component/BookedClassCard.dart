@@ -36,7 +36,7 @@ class BookedClassCard extends StatelessWidget {
                 ),
                 IconButton(
                   icon: const Icon(Icons.delete, color: Colors.red),
-                  onPressed: onDelete, // <-- Call the delete function
+                  onPressed: onDelete, 
                 ),
               ],
             ),
