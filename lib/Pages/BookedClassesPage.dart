@@ -35,31 +35,18 @@ class _BookedClassesPageState extends State<BookedClassesPage> {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
 
-        if (data != null) {
-          if (data is Map) {
-            final List<Map<String, dynamic>> fetchedClasses = data.entries.map((entry) {
-              return {
-                'id': entry.key,
-                ...Map<String, dynamic>.from(entry.value),
-              };
-            }).toList();
+        if (data != null && data is Map) {
+          final List<Map<String, dynamic>> fetchedClasses = data.entries.map((entry) {
+            final classData = Map<String, dynamic>.from(entry.value);
+            return {
+              'firebaseKey': entry.key, // Save firebase key here too
+              ...classData,
+            };
+          }).toList();
 
-            setState(() {
-              bookedClasses = fetchedClasses;
-            });
-          } else if (data is List) {
-            final List<Map<String, dynamic>> fetchedClasses = data.map((item) {
-              return Map<String, dynamic>.from(item);
-            }).toList();
-
-            setState(() {
-              bookedClasses = fetchedClasses;
-            });
-          } else {
-            setState(() {
-              bookedClasses = [];
-            });
-          }
+          setState(() {
+            bookedClasses = fetchedClasses;
+          });
         } else {
           setState(() {
             bookedClasses = [];
@@ -74,6 +61,32 @@ class _BookedClassesPageState extends State<BookedClassesPage> {
       setState(() {
         isLoading = false;
       });
+    }
+  }
+
+  Future<void> deleteBookedClass(String firebaseKey) async {
+    print("Deleting booked class with key: $firebaseKey");
+
+    try {
+      final response = await http.delete(
+        Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/Booked/$firebaseKey.json'),
+      );
+
+      if (response.statusCode == 200) {
+        fetchBookedClasses();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Booked class deleted successfully!")),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Failed to delete: ${response.reasonPhrase}")),
+        );
+      }
+    } catch (e) {
+      print("Error deleting booked class: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("An error occurred. Please try again.")),
+      );
     }
   }
 
@@ -92,12 +105,15 @@ class _BookedClassesPageState extends State<BookedClassesPage> {
                   child: Column(
                     children: [
                       ListView.builder(
-                        shrinkWrap: true, // Ensures the ListView takes only the necessary space
-                        physics: const NeverScrollableScrollPhysics(), // Prevents nested scrolling
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
                         itemCount: bookedClasses.length,
                         itemBuilder: (context, index) {
                           final yogaClass = bookedClasses[index];
-                          return BookedClassCard(yogaClass: yogaClass);
+                          return BookedClassCard(
+                            yogaClass: yogaClass,
+                            onDelete: () => deleteBookedClass(yogaClass['firebaseKey']),
+                          );
                         },
                       ),
                     ],
