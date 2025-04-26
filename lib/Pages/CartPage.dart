@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -26,7 +27,16 @@ class _CartPageState extends State<CartPage> {
     }
     fetchBookings();
   }
-
+    // Reauthenticate the user
+  Future<void> reauthenticateUser(String email, String password) async {
+    try {
+      final credential = EmailAuthProvider.credential(email: email, password: password);
+      await FirebaseAuth.instance.currentUser?.reauthenticateWithCredential(credential);
+      print("Reauthentication successful");
+    } catch (e) {
+      print("Error reauthenticating user: $e");
+    }
+  }
   // Fetch bookings from Firebase
   Future<void> fetchBookings() async {
     setState(() {
