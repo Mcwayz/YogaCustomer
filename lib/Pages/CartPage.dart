@@ -166,10 +166,11 @@ class _CartPageState extends State<CartPage> {
                   itemCount: bookings.length,
                   itemBuilder: (context, index) {
                     final booking = bookings[index];
+                    print("Booking ID: ${booking['id']}, Type: ${booking['id'].runtimeType}");
                     return BookingCard(
                       booking: booking,
                       onSlideToBook: () => moveToBooked(booking['id'], booking),
-                      onDelete: () => deleteFromCart(booking['id']),
+                      onDelete: () => deleteFromCart(booking['id'].toString()), // Convert to String
                     );
                   },
                 ),
