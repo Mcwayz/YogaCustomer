@@ -15,13 +15,13 @@ class BookingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8), // Reduced margin
+      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10), // Slightly rounded corners
+        borderRadius: BorderRadius.circular(10),
       ),
-      elevation: 2, // Subtle shadow for a clean look
+      elevation: 2,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16), // Compact padding
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -32,7 +32,7 @@ class BookingCard extends StatelessWidget {
                 Text(
                   booking['type'] ?? "Unknown Type",
                   style: const TextStyle(
-                    fontSize: 16, // Slightly larger font size
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
@@ -40,7 +40,7 @@ class BookingCard extends StatelessWidget {
                 Text(
                   "£${booking['price'] ?? "Unknown"}",
                   style: const TextStyle(
-                    fontSize: 16, // Slightly larger font size
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: Colors.green,
                   ),
@@ -68,10 +68,10 @@ class BookingCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 ElevatedButton(
-                  onPressed: onSlideToBook,
+                  onPressed: onSlideToBook, // Logic for booking
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF4CAF50), // Green color for "Book"
-                    minimumSize: const Size(90, 36), // Adjusted button size
+                    backgroundColor: const Color(0xFF4CAF50),
+                    minimumSize: const Size(90, 36),
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -79,15 +79,15 @@ class BookingCard extends StatelessWidget {
                   ),
                   child: const Text(
                     "Book",
-                    style: TextStyle(fontSize: 14), // Adjusted font size
+                    style: TextStyle(fontSize: 14),
                   ),
                 ),
                 const SizedBox(width: 12),
                 ElevatedButton(
-                  onPressed: onDelete,
+                  onPressed: onDelete, // Logic for deleting
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red, // Red color for "Delete"
-                    minimumSize: const Size(90, 36), // Adjusted button size
+                    backgroundColor: Colors.red,
+                    minimumSize: const Size(90, 36),
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -95,7 +95,7 @@ class BookingCard extends StatelessWidget {
                   ),
                   child: const Text(
                     "Delete",
-                    style: TextStyle(fontSize: 14), // Adjusted font size
+                    style: TextStyle(fontSize: 14),
                   ),
                 ),
               ],
