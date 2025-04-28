@@ -38,7 +38,7 @@ class _BookedClassesPageState extends State<BookedClassesPage> {
         if (data != null && data is Map) {
           final List<Map<String, dynamic>> fetchedClasses = data.entries.map((entry) {
             return {
-              'firebaseKey': entry.key, // Important! Save Firebase Key separately
+              'outerKey': entry.key, // 🔥 Store the outer Firebase key
               ...Map<String, dynamic>.from(entry.value),
             };
           }).toList();
@@ -63,16 +63,16 @@ class _BookedClassesPageState extends State<BookedClassesPage> {
     }
   }
 
-  Future<void> deleteClass(String firebaseKey) async {
+  Future<void> deleteClass(String outerKey) async {
     try {
       final deleteUrl = Uri.parse(
-        'https://universal-yoga-8f236-default-rtdb.firebaseio.com/Booked/$firebaseKey.json',
+        'https://universal-yoga-8f236-default-rtdb.firebaseio.com/Booked/$outerKey.json',
       );
       final response = await http.delete(deleteUrl);
 
       if (response.statusCode == 200) {
         setState(() {
-          bookedClasses.removeWhere((element) => element['firebaseKey'] == firebaseKey);
+          bookedClasses.removeWhere((element) => element['outerKey'] == outerKey);
         });
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Class deleted successfully')),
@@ -90,7 +90,7 @@ class _BookedClassesPageState extends State<BookedClassesPage> {
     }
   }
 
-  Future<void> confirmDelete(String firebaseKey) async {
+  Future<void> confirmDelete(String outerKey) async {
     final shouldDelete = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -113,7 +113,7 @@ class _BookedClassesPageState extends State<BookedClassesPage> {
     );
 
     if (shouldDelete == true) {
-      await deleteClass(firebaseKey);
+      await deleteClass(outerKey);
     }
   }
 
@@ -135,9 +135,9 @@ class _BookedClassesPageState extends State<BookedClassesPage> {
                     return BookedClassCard(
                       yogaClass: yogaClass,
                       onDelete: () async {
-                        final firebaseKey = yogaClass['firebaseKey'];
-                        if (firebaseKey != null) {
-                          await confirmDelete(firebaseKey);
+                        final outerKey = yogaClass['outerKey'];
+                        if (outerKey != null) {
+                          await confirmDelete(outerKey);
                         }
                       },
                     );
