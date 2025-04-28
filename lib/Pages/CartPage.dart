@@ -21,10 +21,11 @@ class _CartPageState extends State<CartPage> {
   @override
   void initState() {
     super.initState();
+    fetchBookings();
+    // Only add to cart if a new yogaClass is passed
     if (widget.yogaClass != null) {
       addToCart(widget.yogaClass!);
     }
-    fetchBookings();
   }
 
   Future<void> fetchBookings() async {
@@ -70,6 +71,19 @@ class _CartPageState extends State<CartPage> {
 
   Future<void> addToCart(Map<String, dynamic> yogaClass) async {
     try {
+      // Check if the class already exists in the cart
+      final existingBooking = bookings.firstWhere(
+        (booking) => booking['id'] == yogaClass['id'],
+        orElse: () => {},
+      );
+
+      if (existingBooking.isNotEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Class is already in the cart!")),
+        );
+        return;
+      }
+
       final response = await http.post(
         Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/cart.json'),
         headers: {'Content-Type': 'application/json'},
