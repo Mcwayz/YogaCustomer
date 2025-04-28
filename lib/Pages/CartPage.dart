@@ -117,8 +117,7 @@ class _CartPageState extends State<CartPage> {
       );
 
       if (response.statusCode == 200) {
-        await deleteFromCart(firebaseKey);
-        fetchBookings();
+        await deleteFromCart(firebaseKey, showMessage: false); // Suppress "Deleted successfully!" message
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Booked successfully!")),
         );
@@ -135,7 +134,7 @@ class _CartPageState extends State<CartPage> {
     }
   }
 
-  Future<void> deleteFromCart(String firebaseKey) async {
+  Future<void> deleteFromCart(String firebaseKey, {bool showMessage = true}) async {
     print("Deleting booking with key: $firebaseKey");
 
     try {
@@ -147,9 +146,11 @@ class _CartPageState extends State<CartPage> {
 
       if (response.statusCode == 200) {
         fetchBookings();
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Deleted successfully!")),
-        );
+        if (showMessage) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Deleted successfully!")),
+          );
+        }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Failed to delete: ${response.reasonPhrase}")),
