@@ -68,7 +68,29 @@ class BookingCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 ElevatedButton(
-                  onPressed: onSlideToBook,
+                  onPressed: () async {
+                    final confirm = await showDialog<bool>(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text("Confirm Booking"),
+                        content: const Text("Are you sure you want to book this class?"),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, false),
+                            child: const Text("Cancel"),
+                          ),
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, true),
+                            child: const Text("Book"),
+                          ),
+                        ],
+                      ),
+                    );
+
+                    if (confirm == true) {
+                      onSlideToBook();
+                    }
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromARGB(255, 156, 219, 162),
                     minimumSize: const Size(80, 30),
