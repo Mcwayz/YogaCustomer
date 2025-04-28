@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class BookedClassCard extends StatelessWidget {
-  final Map<String, dynamic> yogaClass; 
-  final VoidCallback? onDelete; 
+  final Map<String, dynamic> yogaClass;
+  final VoidCallback? onDelete;
 
   const BookedClassCard({
     super.key,
     required this.yogaClass,
-    this.onDelete, 
+    this.onDelete,
   });
 
   @override
@@ -23,7 +23,7 @@ class BookedClassCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row( 
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
@@ -36,7 +36,7 @@ class BookedClassCard extends StatelessWidget {
                 ),
                 IconButton(
                   icon: const Icon(Icons.delete, color: Colors.red),
-                  onPressed: onDelete, 
+                  onPressed: onDelete,
                 ),
               ],
             ),

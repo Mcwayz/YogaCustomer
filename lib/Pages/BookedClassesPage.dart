@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:firebase_auth/firebase_auth.dart'; // Import FirebaseAuth
 
 import '../component/customAppBar.dart';
 import '../component/BookedClassCard.dart';
@@ -29,29 +28,30 @@ class _BookedClassesPageState extends State<BookedClassesPage> {
     });
 
     try {
-      final String? uid = FirebaseAuth.instance.currentUser?.uid;
-      if (uid == null) {
-        throw Exception("User not logged in");
-      }
-
       final response = await http.get(
-        Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/users/$uid/booked.json'),
+        Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/Booked.json'),
       );
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
 
-        if (data != null && data is Map) {
-          final List<Map<String, dynamic>> fetchedClasses = data.entries.map((entry) {
-            return {
-              'id': entry.key,
-              ...Map<String, dynamic>.from(entry.value),
-            };
-          }).toList();
+        if (data != null) {
+          if (data is Map) {
+            final List<Map<String, dynamic>> fetchedClasses = data.entries.map((entry) {
+              return {
+                'id': entry.key,
+                ...Map<String, dynamic>.from(entry.value),
+              };
+            }).toList();
 
-          setState(() {
-            bookedClasses = fetchedClasses;
-          });
+            setState(() {
+              bookedClasses = fetchedClasses;
+            });
+          } else {
+            setState(() {
+              bookedClasses = [];
+            });
+          }
         } else {
           setState(() {
             bookedClasses = [];
@@ -71,12 +71,7 @@ class _BookedClassesPageState extends State<BookedClassesPage> {
 
   Future<void> deleteClass(String classId, int index) async {
     try {
-      final String? uid = FirebaseAuth.instance.currentUser?.uid;
-      if (uid == null) {
-        throw Exception("User not logged in");
-      }
-
-      final deleteUrl = Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/users/$uid/booked/$classId.json');
+      final deleteUrl = Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/Booked/$classId.json');
       final response = await http.delete(deleteUrl);
 
       if (response.statusCode == 200) {

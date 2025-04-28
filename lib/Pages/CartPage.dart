@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:firebase_auth/firebase_auth.dart'; // Import FirebaseAuth
 
 import '../component/customAppBar.dart';
 import '../component/BookingCard.dart';
@@ -35,13 +34,8 @@ class _CartPageState extends State<CartPage> {
     });
 
     try {
-      final String? uid = FirebaseAuth.instance.currentUser?.uid;
-      if (uid == null) {
-        throw Exception("User not logged in");
-      }
-
       final response = await http.get(
-        Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/users/$uid/cart.json'),
+        Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/cart.json'),
       );
       print("Fetched bookings response: ${response.body}");
 
@@ -77,11 +71,6 @@ class _CartPageState extends State<CartPage> {
 
   Future<void> addToCart(Map<String, dynamic> yogaClass) async {
     try {
-      final String? uid = FirebaseAuth.instance.currentUser?.uid;
-      if (uid == null) {
-        throw Exception("User not logged in");
-      }
-
       // Check if the class already exists in the cart
       final existingBooking = bookings.firstWhere(
         (booking) => booking['id'] == yogaClass['id'],
@@ -96,7 +85,7 @@ class _CartPageState extends State<CartPage> {
       }
 
       final response = await http.post(
-        Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/users/$uid/cart.json'),
+        Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/cart.json'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode(yogaClass),
       );
@@ -121,13 +110,8 @@ class _CartPageState extends State<CartPage> {
 
   Future<void> moveToBooked(String firebaseKey, Map<String, dynamic> booking) async {
     try {
-      final String? uid = FirebaseAuth.instance.currentUser?.uid;
-      if (uid == null) {
-        throw Exception("User not logged in");
-      }
-
       final response = await http.post(
-        Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/users/$uid/booked.json'),
+        Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/Booked.json'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode(booking),
       );
@@ -151,15 +135,14 @@ class _CartPageState extends State<CartPage> {
   }
 
   Future<void> deleteFromCart(String firebaseKey, {bool showMessage = true}) async {
-    try {
-      final String? uid = FirebaseAuth.instance.currentUser?.uid;
-      if (uid == null) {
-        throw Exception("User not logged in");
-      }
+    print("Deleting booking with key: $firebaseKey");
 
+    try {
       final response = await http.delete(
-        Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/users/$uid/cart/$firebaseKey.json'),
+        Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/cart/$firebaseKey.json'),
       );
+      print("Response status: ${response.statusCode}");
+      print("Response body: ${response.body}");
 
       if (response.statusCode == 200) {
         fetchBookings();

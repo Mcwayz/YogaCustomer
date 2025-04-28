@@ -24,7 +24,7 @@ class _HomePageState extends State<HomePage> {
     fetchYogaClasses();
   }
 
-  Future<void> fetchYogaClasses() async {
+    Future<void> fetchYogaClasses() async {
     setState(() {
       isLoading = true; // Show loading indicator
     });
@@ -32,27 +32,49 @@ class _HomePageState extends State<HomePage> {
       final response = await http.get(
         Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/courses.json'),
       );
+  
       if (response.statusCode == 200) {
-        final List<dynamic> classes = json.decode(response.body);
-        // Filter out null entries
-        final List<dynamic> validClasses = classes.where((classItem) => classItem != null).toList();
-        setState(() {
-          yogaClasses = validClasses;
-          filteredClasses = validClasses;
-        });
-        print("Fetched classes: $validClasses"); // Debug log
+        try {
+          final data = json.decode(response.body);
+  
+          if (data != null && data is Map<String, dynamic>) {
+            // Convert the Map to a List and ensure proper typing
+            final List<Map<String, dynamic>> validClasses = data.entries.map((entry) {
+              return {
+                'id': entry.key, // Add the key as an ID
+                ...Map<String, dynamic>.from(entry.value), // Ensure proper typing
+              };
+            }).toList();
+  
+            if (!mounted) return; // Check if the widget is still mounted
+            setState(() {
+              yogaClasses = validClasses;
+              filteredClasses = validClasses;
+            });
+            print("Fetched classes: $validClasses"); // Debug log
+          } else {
+            if (!mounted) return; // Check if the widget is still mounted
+            setState(() {
+              yogaClasses = [];
+              filteredClasses = [];
+            });
+            print("No classes found in the database.");
+          }
+        } catch (e) {
+          print("Error parsing JSON: $e");
+        }
       } else {
         throw Exception("Failed to fetch classes. Status code: ${response.statusCode}");
       }
     } catch (e) {
-      print("Error fetching classes: $e"); // Log error to the terminal
+      print("Error fetching classes: $e");
     } finally {
+      if (!mounted) return; // Check if the widget is still mounted
       setState(() {
         isLoading = false; // Hide loading indicator
       });
     }
   }
-
   void filterClasses(String query) {
     setState(() {
       searchQuery = query.toLowerCase();
