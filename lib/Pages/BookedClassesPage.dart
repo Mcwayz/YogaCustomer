@@ -35,23 +35,17 @@ class _BookedClassesPageState extends State<BookedClassesPage> {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
 
-        if (data != null) {
-          if (data is Map) {
-            final List<Map<String, dynamic>> fetchedClasses = data.entries.map((entry) {
-              return {
-                'id': entry.key,
-                ...Map<String, dynamic>.from(entry.value),
-              };
-            }).toList();
+        if (data != null && data is Map) {
+          final List<Map<String, dynamic>> fetchedClasses = data.entries.map((entry) {
+            return {
+              'firebaseKey': entry.key, // Important! Save Firebase Key separately
+              ...Map<String, dynamic>.from(entry.value),
+            };
+          }).toList();
 
-            setState(() {
-              bookedClasses = fetchedClasses;
-            });
-          } else {
-            setState(() {
-              bookedClasses = [];
-            });
-          }
+          setState(() {
+            bookedClasses = fetchedClasses;
+          });
         } else {
           setState(() {
             bookedClasses = [];
@@ -69,14 +63,16 @@ class _BookedClassesPageState extends State<BookedClassesPage> {
     }
   }
 
-  Future<void> deleteClass(String classId, int index) async {
+  Future<void> deleteClass(String firebaseKey) async {
     try {
-      final deleteUrl = Uri.parse('https://universal-yoga-8f236-default-rtdb.firebaseio.com/Booked/$classId.json');
+      final deleteUrl = Uri.parse(
+        'https://universal-yoga-8f236-default-rtdb.firebaseio.com/Booked/$firebaseKey.json',
+      );
       final response = await http.delete(deleteUrl);
 
       if (response.statusCode == 200) {
         setState(() {
-          bookedClasses.removeAt(index);
+          bookedClasses.removeWhere((element) => element['firebaseKey'] == firebaseKey);
         });
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Class deleted successfully')),
@@ -94,6 +90,33 @@ class _BookedClassesPageState extends State<BookedClassesPage> {
     }
   }
 
+  Future<void> confirmDelete(String firebaseKey) async {
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Confirm Deletion'),
+        content: const Text('Are you sure you want to delete this class?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+            ),
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+
+    if (shouldDelete == true) {
+      await deleteClass(firebaseKey);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,28 +128,20 @@ class _BookedClassesPageState extends State<BookedClassesPage> {
           ? const Center(child: CircularProgressIndicator())
           : bookedClasses.isEmpty
               ? const Center(child: Text("No booked classes found"))
-              : SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: bookedClasses.length,
-                        itemBuilder: (context, index) {
-                          final yogaClass = bookedClasses[index];
-                          return BookedClassCard(
-                            yogaClass: yogaClass,
-                            onDelete: () async {
-                              final classId = yogaClass['id'];
-                              if (classId != null) {
-                                await deleteClass(classId, index);
-                              }
-                            },
-                          );
-                        },
-                      ),
-                    ],
-                  ),
+              : ListView.builder(
+                  itemCount: bookedClasses.length,
+                  itemBuilder: (context, index) {
+                    final yogaClass = bookedClasses[index];
+                    return BookedClassCard(
+                      yogaClass: yogaClass,
+                      onDelete: () async {
+                        final firebaseKey = yogaClass['firebaseKey'];
+                        if (firebaseKey != null) {
+                          await confirmDelete(firebaseKey);
+                        }
+                      },
+                    );
+                  },
                 ),
     );
   }
